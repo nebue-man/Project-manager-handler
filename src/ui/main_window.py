@@ -121,8 +121,8 @@ class MainWindow(ctk.CTk):
         ]
 
         for i, (text, icon, color) in enumerate(nav_items, start=2):
-            # Custom styled nav button
-            btn = StyledButton(
+            # Animated nav button with hover effects
+            btn = AnimatedButton(
                 self.sidebar,
                 style="ghost",
                 text=f"  {icon}  {text}",
@@ -131,7 +131,9 @@ class MainWindow(ctk.CTk):
                 height=45,
                 font=AppFonts.get_font(13, "normal"),
                 anchor="w",
-                justify="left"
+                justify="left",
+                hover_effect=True,
+                pulse_on_click=True
             )
             btn.grid(row=i, column=0, padx=25, pady=5)
 
