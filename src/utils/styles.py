@@ -3,7 +3,28 @@ Visual styles and theme management for the Project Manager application.
 Defines colors, fonts, and styling constants for a consistent look.
 """
 
-import customtkinter as ctk
+try:
+    import customtkinter as ctk
+    CTK_AVAILABLE = True
+except ImportError:
+    CTK_AVAILABLE = False
+    # Create a minimal mock for testing without the full GUI
+    class MockCTkFont:
+        def __init__(self, family="Helvetica", size=12, weight="normal"):
+            self.family = family
+            self.size = size
+            self.weight = weight
+
+    class ctk:
+        @staticmethod
+        def set_appearance_mode(mode):
+            pass
+        @staticmethod
+        def set_default_color_theme(theme):
+            pass
+        class CTkFont:
+            def __init__(self, **kwargs):
+                pass
 
 class AppColors:
     """Color scheme for the application."""
