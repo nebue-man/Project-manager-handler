@@ -60,82 +60,138 @@ class MainWindow(ctk.CTk):
 
     def _create_sidebar(self):
         """Create the sidebar navigation."""
-        # Sidebar frame
-        self.sidebar = ctk.CTkFrame(self, width=250, corner_radius=0)
-        self.sidebar.grid(row=0, column=0, sticky="nsew")
-        self.sidebar.grid_rowconfigure(8, weight=1)  # Make the area before settings expandable
-
-        # App title
-        self.title_label = ctk.CTkLabel(
-            self.sidebar,
-            text="Project Manager",
-            font=ctk.CTkFont(size=24, weight="bold")
+        # Sidebar frame with gradient background effect
+        self.sidebar = StyledFrame(
+            self,
+            width=280,
+            corner_radius=0,
+            fg_color=("#f8f9fa", "#2c3e50")  # Light gray / Dark blue-gray
         )
-        self.title_label.grid(row=0, column=0, padx=20, pady=(20, 10))
+        self.sidebar.grid(row=0, column=0, sticky="nsew")
+        self.sidebar.grid_rowconfigure(9, weight=1)  # Make the area before status expandable
 
-        # Navigation buttons
+        # App logo area
+        logo_frame = StyledFrame(
+            self.sidebar,
+            height=80,
+            fg_color=(AppColors.PRIMARY, AppColors.PRIMARY_DARK),
+            corner_radius=0
+        )
+        logo_frame.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
+        logo_frame.grid_rowconfigure(0, weight=1)
+        logo_frame.grid_columnconfigure(0, weight=1)
+
+        # App title with better styling
+        self.title_label = StyledLabel(
+            logo_frame,
+            text="🚀 Project Manager",
+            variant="title",
+            text_color="white"
+        )
+        self.title_label.grid(row=0, column=0, pady=20)
+
+        # Subtitle
+        self.subtitle_label = StyledLabel(
+            logo_frame,
+            text="Organize • Track • Learn",
+            variant="caption",
+            text_color=AppColors.GRAY_200
+        )
+        self.subtitle_label.grid(row=1, column=0, pady=(0, 20))
+
+        # Navigation section
+        nav_label = StyledLabel(
+            self.sidebar,
+            text="NAVIGATION",
+            variant="caption",
+            text_color=(AppColors.GRAY_500, AppColors.GRAY_400)
+        )
+        nav_label.grid(row=1, column=0, padx=25, pady=(30, 10), sticky="w")
+
+        # Navigation buttons with better styling
         self.nav_buttons = {}
         nav_items = [
-            ("Projects", "📁"),
-            ("Learnings", "📚"),
-            ("Calendar", "📅"),
-            ("Statistics", "📊"),
-            ("Settings", "⚙️")
+            ("Projects", "📁", AppColors.PRIMARY),
+            ("Learnings", "📚", AppColors.SUCCESS),
+            ("Calendar", "📅", AppColors.SECONDARY),
+            ("Statistics", "📊", AppColors.WARNING),
+            ("Settings", "⚙️", AppColors.GRAY_600)
         ]
 
-        for i, (text, icon) in enumerate(nav_items, start=1):
-            btn = ctk.CTkButton(
+        for i, (text, icon, color) in enumerate(nav_items, start=2):
+            # Custom styled nav button
+            btn = StyledButton(
                 self.sidebar,
-                text=f"{icon} {text}",
+                style="ghost",
+                text=f"  {icon}  {text}",
                 command=lambda t=text: self._nav_button_clicked(t),
-                width=200,
-                height=40,
-                font=ctk.CTkFont(size=14),
-                anchor="w"
+                width=230,
+                height=45,
+                font=AppFonts.get_font(13, "normal"),
+                anchor="w",
+                justify="left"
             )
-            btn.grid(row=i, column=0, padx=20, pady=5)
-            self.nav_buttons[text] = btn
+            btn.grid(row=i, column=0, padx=25, pady=5)
 
-        # Separator
-        separator = ctk.CTkFrame(self.sidebar, height=2)
-        separator.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
+            # Store button and its color for hover effects
+            self.nav_buttons[text] = {"button": btn, "color": color}
 
-        # Quick actions
-        self.quick_actions_label = ctk.CTkLabel(
+        # Separator with better styling
+        separator = StyledFrame(
             self.sidebar,
-            text="Quick Actions",
-            font=ctk.CTkFont(size=16, weight="bold")
+            height=2,
+            fg_color=(AppColors.GRAY_300, AppColors.GRAY_600),
+            corner_radius=1
         )
-        self.quick_actions_label.grid(row=7, column=0, padx=20, pady=(10, 5))
+        separator.grid(row=7, column=0, padx=25, pady=20, sticky="ew")
 
-        self.add_project_btn = ctk.CTkButton(
+        # Quick Actions section
+        actions_label = StyledLabel(
             self.sidebar,
-            text="+ New Project",
+            text="QUICK ACTIONS",
+            variant="caption",
+            text_color=(AppColors.GRAY_500, AppColors.GRAY_400)
+        )
+        actions_label.grid(row=8, column=0, padx=25, pady=(0, 15), sticky="w")
+
+        # Enhanced quick action buttons
+        self.add_project_btn = StyledButton(
+            self.sidebar,
+            style="primary",
+            text="➕ New Project",
             command=self._add_project,
-            width=200,
-            height=35,
-            font=ctk.CTkFont(size=12)
+            width=230,
+            height=42,
+            font=AppFonts.get_font(12, "bold")
         )
-        self.add_project_btn.grid(row=8, column=0, padx=20, pady=5)
+        self.add_project_btn.grid(row=9, column=0, padx=25, pady=(0, 10))
 
-        self.add_learning_btn = ctk.CTkButton(
+        self.add_learning_btn = StyledButton(
             self.sidebar,
-            text="+ Capture Learning",
+            style="outline",
+            text="📝 Capture Learning",
             command=self._add_learning,
-            width=200,
-            height=35,
-            font=ctk.CTkFont(size=12)
+            width=230,
+            height=42,
+            font=AppFonts.get_font(12, "bold")
         )
-        self.add_learning_btn.grid(row=9, column=0, padx=20, pady=5)
+        self.add_learning_btn.grid(row=10, column=0, padx=25, pady=(0, 20))
 
-        # Status indicator
-        self.status_label = ctk.CTkLabel(
+        # Status indicator with better styling
+        status_frame = StyledFrame(
             self.sidebar,
-            text="● Online",
-            font=ctk.CTkFont(size=12),
-            text_color="#4CAF50"
+            fg_color=(AppColors.GRAY_100, AppColors.GRAY_800),
+            corner_radius=AppStyles.CARD_CORNER_RADIUS
         )
-        self.status_label.grid(row=10, column=0, padx=20, pady=(20, 10))
+        status_frame.grid(row=11, column=0, padx=25, pady=(0, 20), sticky="ew")
+
+        self.status_label = StyledLabel(
+            status_frame,
+            text="🟢 Online • Synced",
+            variant="caption",
+            text_color=(AppColors.SUCCESS_DARK, AppColors.SUCCESS_LIGHT)
+        )
+        self.status_label.grid(row=0, column=0, padx=15, pady=10)
 
     def _create_main_content(self):
         """Create the main content area."""
