@@ -567,13 +567,38 @@ class MainWindow(ctk.CTk):
 
     def _add_project(self):
         """Handle add project button click."""
-        # Placeholder - will open add project dialog
-        messagebox.showinfo("Add Project", "Add project dialog will be implemented next!")
+        try:
+            from .dialogs.add_project import AddProjectDialog
+
+            dialog = AddProjectDialog(
+                parent=self,
+                project_model=self.project_model,
+                notification_service=self.notification_service,
+                callback=lambda project_id: self._refresh_projects()
+            )
+
+        except ImportError:
+            messagebox.showerror("Error", "Add project dialog not available.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open add project dialog: {e}")
 
     def _add_learning(self):
         """Handle add learning button click."""
-        # Placeholder - will open add learning dialog
-        messagebox.showinfo("Capture Learning", "Capture learning dialog will be implemented next!")
+        try:
+            from .dialogs.add_learning import AddLearningDialog
+
+            dialog = AddLearningDialog(
+                parent=self,
+                learning_model=self.learning_model,
+                project_model=self.project_model,
+                notification_service=self.notification_service,
+                callback=lambda learning_id: self._refresh_learnings()
+            )
+
+        except ImportError:
+            messagebox.showerror("Error", "Add learning dialog not available.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open add learning dialog: {e}")
 
     def _refresh_all(self):
         """Refresh all data displays."""
