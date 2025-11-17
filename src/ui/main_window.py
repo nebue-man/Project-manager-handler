@@ -602,6 +602,29 @@ class MainWindow(ctk.CTk):
         except Exception as e:
             messagebox.showerror("Error", f"Failed to open add learning dialog: {e}")
 
+    def _open_settings(self):
+        """Handle open settings button click."""
+        try:
+            from .dialogs.settings import SettingsDialog
+
+            dialog = SettingsDialog(
+                parent=self,
+                app_config=self.config,
+                notification_service=self.notification_service,
+                callback=self._on_settings_changed
+            )
+
+        except ImportError:
+            messagebox.showerror("Error", "Settings dialog not available.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open settings dialog: {e}")
+
+    def _on_settings_changed(self):
+        """Handle settings change callback."""
+        # Refresh UI elements that depend on settings
+        # For now, just show a message
+        messagebox.showinfo("Settings", "Settings changed. Some changes may require restart.")
+
     def _refresh_all(self):
         """Refresh all data displays."""
         self._refresh_projects()
