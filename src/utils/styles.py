@@ -25,6 +25,18 @@ except ImportError:
         class CTkFont:
             def __init__(self, **kwargs):
                 pass
+        class CTkFrame:
+            def __init__(self, parent, **kwargs):
+                pass
+        class CTkButton:
+            def __init__(self, parent, **kwargs):
+                pass
+        class CTkEntry:
+            def __init__(self, parent, **kwargs):
+                pass
+        class CTkLabel:
+            def __init__(self, parent, **kwargs):
+                pass
 
 class AppColors:
     """Color scheme for the application."""
