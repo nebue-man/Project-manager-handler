@@ -519,20 +519,77 @@ class StyledButton:
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
 class StyledEntry(ctk.CTkEntry):
-    """An entry field with modern styling."""
+    """An entry field with enhanced modern styling and better UX."""
 
-    def __init__(self, parent, **kwargs):
+    def __init__(self, parent, variant="default", size="md", **kwargs):
         try:
-            default_style = {
-                "corner_radius": AppStyles.INPUT_CORNER_RADIUS,
-                "border_width": AppStyles.INPUT_BORDER_WIDTH,
-                "border_color": AppColors.INPUT_BORDER_COLOR,
-                "height": AppStyles.INPUT_HEIGHT,
-                "font": AppFonts.get_font(12, "normal")
+            # Define size configurations
+            sizes = {
+                "sm": {
+                    "height": 36,
+                    "font": AppFonts.get_font(12, "normal"),
+                    "corner_radius": 8
+                },
+                "md": {
+                    "height": AppStyles.INPUT_HEIGHT,
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "normal"),
+                    "corner_radius": AppStyles.INPUT_CORNER_RADIUS
+                },
+                "lg": {
+                    "height": 52,
+                    "font": AppFonts.get_font(16, "normal"),
+                    "corner_radius": 12
+                }
             }
 
-            default_style.update(kwargs)
-            super().__init__(parent, **default_style)
+            # Define variant configurations
+            variants = {
+                "default": {
+                    "border_width": AppStyles.INPUT_BORDER_WIDTH,
+                    "border_color": AppColors.INPUT_BORDER_COLOR,
+                    "focus_border_color": AppColors.INPUT_FOCUS_BORDER_COLOR,
+                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_200),
+                    "fg_color": (AppColors.WHITE, AppColors.GRAY_850),
+                },
+                "search": {
+                    "border_width": AppStyles.BORDER_THIN,
+                    "border_color": AppColors.GRAY_200,
+                    "focus_border_color": AppColors.ACCENT_BLUE,
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
+                    "fg_color": (AppColors.GRAY_50, AppColors.GRAY_800),
+                    "placeholder_text_color": (AppColors.GRAY_400, AppColors.GRAY_500),
+                },
+                "success": {
+                    "border_width": AppStyles.BORDER_NORMAL,
+                    "border_color": AppColors.SUCCESS_LIGHT,
+                    "focus_border_color": AppColors.SUCCESS,
+                    "text_color": (AppColors.SUCCESS_DARK, AppColors.SUCCESS_LIGHT),
+                    "fg_color": (AppColors.SUCCESS_ULTRA_LIGHT, AppColors.GRAY_850),
+                },
+                "error": {
+                    "border_width": AppStyles.BORDER_NORMAL,
+                    "border_color": AppColors.ERROR_LIGHT,
+                    "focus_border_color": AppColors.ERROR,
+                    "text_color": (AppColors.ERROR_DARK, AppColors.ERROR_LIGHT),
+                    "fg_color": (AppColors.ERROR_ULTRA_LIGHT, AppColors.GRAY_850),
+                },
+                "minimal": {
+                    "border_width": AppStyles.BORDER_NONE,
+                    "border_color": "transparent",
+                    "focus_border_color": AppColors.PRIMARY,
+                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_200),
+                    "fg_color": (AppColors.GRAY_100, AppColors.GRAY_850),
+                }
+            }
+
+            # Get size and variant configurations
+            size_config = sizes.get(size, sizes["md"])
+            variant_config = variants.get(variant, variants["default"])
+
+            # Merge configurations with kwargs having highest priority
+            final_config = {**size_config, **variant_config, **kwargs}
+
+            super().__init__(parent, **final_config)
 
         except Exception as e:
             # Fallback to basic entry if styling fails
@@ -540,41 +597,124 @@ class StyledEntry(ctk.CTkEntry):
             super().__init__(parent, **kwargs)
 
 class StyledLabel(ctk.CTkLabel):
-    """A label with modern styling options."""
+    """A label with comprehensive modern styling options."""
 
-    def __init__(self, parent, variant="body", **kwargs):
+    def __init__(self, parent, variant="body", size="md", **kwargs):
         try:
-            variant_styles = {
-                "title": {
-                    "font": AppFonts.get_font(28, "bold"),
-                    "text_color": (AppColors.GRAY_900, AppColors.WHITE)
-                },
-                "heading": {
-                    "font": AppFonts.get_font(20, "bold"),
-                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_100)
-                },
-                "subheading": {
-                    "font": AppFonts.get_font(16, "bold"),
-                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_200)
-                },
-                "body": {
-                    "font": AppFonts.get_font(12, "normal"),
-                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300)
-                },
-                "caption": {
-                    "font": AppFonts.get_font(10, "normal"),
-                    "text_color": (AppColors.GRAY_500, AppColors.GRAY_400)
-                },
-                "muted": {
-                    "font": AppFonts.get_font(9, "normal"),
-                    "text_color": (AppColors.GRAY_400, AppColors.GRAY_500)
-                }
+            # Define size configurations
+            sizes = {
+                "xs": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_XS, "normal")},
+                "sm": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_SM, "normal")},
+                "md": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "normal")},
+                "lg": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_LG, "normal")},
+                "xl": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_XL, "normal")},
+                "2xl": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_2XL, "normal")},
+                "3xl": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_3XL, "normal")},
+                "4xl": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_4XL, "bold")},
+                "5xl": {"font": AppFonts.get_font(AppStyles.FONT_SIZE_5XL, "bold")},
             }
 
-            style_config = variant_styles.get(variant, variant_styles["body"])
-            style_config.update(kwargs)
+            # Define variant configurations
+            variants = {
+                "hero": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_5XL, "bold"),
+                    "text_color": (AppColors.GRAY_900, AppColors.WHITE),
+                    "wraplength": 600,
+                },
+                "h1": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_4XL, "bold"),
+                    "text_color": (AppColors.GRAY_900, AppColors.WHITE),
+                },
+                "h2": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_3XL, "bold"),
+                    "text_color": (AppColors.GRAY_850, AppColors.GRAY_50),
+                },
+                "h3": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_2XL, "bold"),
+                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_100),
+                },
+                "h4": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_XL, "bold"),
+                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_100),
+                },
+                "h5": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_LG, "bold"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_200),
+                },
+                "h6": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "bold"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_200),
+                },
+                "subtitle": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_LG, "normal"),
+                    "text_color": (AppColors.GRAY_600, AppColors.GRAY_400),
+                    "wraplength": 400,
+                },
+                "body": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "normal"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
+                    "wraplength": 500,
+                },
+                "body-large": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_LG, "normal"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
+                    "wraplength": 600,
+                },
+                "body-small": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_SM, "normal"),
+                    "text_color": (AppColors.GRAY_600, AppColors.GRAY_400),
+                    "wraplength": 400,
+                },
+                "caption": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_SM, "normal"),
+                    "text_color": (AppColors.GRAY_500, AppColors.GRAY_400),
+                    "wraplength": 300,
+                },
+                "overline": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_XS, "bold"),
+                    "text_color": (AppColors.GRAY_600, AppColors.GRAY_400),
+                    "text_transform": "uppercase",
+                    "letter_spacing": 1,
+                },
+                "muted": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_SM, "normal"),
+                    "text_color": (AppColors.GRAY_400, AppColors.GRAY_500),
+                    "opacity": 0.8,
+                },
+                "accent": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "bold"),
+                    "text_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
+                },
+                "success": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "bold"),
+                    "text_color": (AppColors.SUCCESS, AppColors.SUCCESS_LIGHT),
+                },
+                "warning": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "bold"),
+                    "text_color": (AppColors.WARNING, AppColors.WARNING_LIGHT),
+                },
+                "error": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "bold"),
+                    "text_color": (AppColors.ERROR, AppColors.ERROR_LIGHT),
+                },
+                "code": {
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_SM, "normal", "Courier New"),
+                    "text_color": (AppColors.ACCENT_PURPLE, AppColors.ACCENT_PURPLE),
+                    "fg_color": (AppColors.GRAY_100, AppColors.GRAY_800),
+                    "corner_radius": 4,
+                    "padx": 8,
+                    "pady": 4,
+                },
+            }
 
-            super().__init__(parent, **style_config)
+            # Get size and variant configurations
+            size_config = sizes.get(size, {})
+            variant_config = variants.get(variant, variants["body"])
+
+            # Merge configurations with kwargs having highest priority
+            final_config = {**size_config, **variant_config, **kwargs}
+
+            super().__init__(parent, **final_config)
 
         except Exception as e:
             # Fallback to basic label if styling fails
