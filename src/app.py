@@ -163,6 +163,9 @@ class ProjectManagerApp:
 
     def _setup_appearance(self):
         """Set up CustomTkinter appearance based on configuration."""
+        if not GUI_AVAILABLE:
+            return
+
         # Set appearance mode based on theme setting
         theme = self.config.get('ui.theme', 'light')
         if theme == 'dark':
