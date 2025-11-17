@@ -274,12 +274,14 @@ class AnimationType:
         return AnimationType.ease_in_out_expo(t)
 
 class UIAnimator:
-    """Handles UI animations with smooth transitions."""
+    """Enhanced animator for professional UI animations."""
 
     def __init__(self):
-        """Initialize animator."""
+        """Initialize animator with animation queue management."""
         self.animations = []
         self.is_running = True
+        self.fps = 60  # Target frames per second
+        self.frame_time = 1000 // self.fps  # Frame time in milliseconds
 
     def animate_color(self, widget, property_name: str, start_color: str,
                       end_color: str, duration: float = 0.3,
