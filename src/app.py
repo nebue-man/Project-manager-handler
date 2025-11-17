@@ -237,6 +237,19 @@ class ProjectManagerApp:
             # Create main window
             root = self.create_main_window()
 
+            if not GUI_AVAILABLE:
+                print("=" * 50)
+                print("PROJECT MANAGER - HEADLESS MODE")
+                print("=" * 50)
+                print("Database and background services are running.")
+                print("Use Ctrl+C to stop the application.")
+                print("=" * 50)
+
+                # Run some database tests to verify functionality
+                print("Testing database functionality...")
+                self.test_database_functionality()
+                print("=" * 50)
+
             # Start the GUI event loop
             root.mainloop()
 
