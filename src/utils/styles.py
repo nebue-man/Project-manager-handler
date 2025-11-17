@@ -238,10 +238,17 @@ class StyledFrame:
             return getattr(self._frame, name)
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
-class StyledButton(ctk.CTkButton):
+class StyledButton:
     """A button with modern styling."""
 
     def __init__(self, parent, style="primary", **kwargs):
+        if not CTK_AVAILABLE:
+            # Mock button for testing
+            self.parent = parent
+            self.style = style
+            self.kwargs = kwargs
+            return
+
         try:
             # Define button styles
             styles = {
@@ -288,12 +295,21 @@ class StyledButton(ctk.CTkButton):
             style_config = styles.get(style, styles["primary"])
             style_config.update(kwargs)
 
-            super().__init__(parent, **style_config)
+            self._button = ctk.CTkButton(parent, **style_config)
 
         except Exception as e:
             # Fallback to basic button if styling fails
             print(f"Warning: StyledButton creation failed: {e}")
-            super().__init__(parent, **kwargs)
+            try:
+                self._button = ctk.CTkButton(parent, **kwargs)
+            except:
+                self._button = None
+
+    def __getattr__(self, name):
+        """Delegate all other method calls to the actual button."""
+        if hasattr(self, '_button') and self._button:
+            return getattr(self._button, name)
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
 class StyledEntry(ctk.CTkEntry):
     """An entry field with modern styling."""
