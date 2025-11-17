@@ -196,52 +196,58 @@ class StyledButton(ctk.CTkButton):
     """A button with modern styling."""
 
     def __init__(self, parent, style="primary", **kwargs):
-        # Define button styles
-        styles = {
-            "primary": {
-                "fg_color": (AppColors.PRIMARY, AppColors.PRIMARY_DARK),
-                "hover_color": (AppColors.PRIMARY_DARK, AppColors.PRIMARY),
-                "text_color": "white",
-                "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                "height": AppStyles.BUTTON_HEIGHT
-            },
-            "secondary": {
-                "fg_color": (AppColors.SECONDARY, AppColors.SECONDARY_DARK),
-                "hover_color": (AppColors.SECONDARY_DARK, AppColors.SECONDARY),
-                "text_color": "white",
-                "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                "height": AppStyles.BUTTON_HEIGHT
-            },
-            "success": {
-                "fg_color": (AppColors.SUCCESS, AppColors.SUCCESS_DARK),
-                "hover_color": (AppColors.SUCCESS_DARK, AppColors.SUCCESS),
-                "text_color": "white",
-                "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                "height": AppStyles.BUTTON_HEIGHT
-            },
-            "outline": {
-                "fg_color": "transparent",
-                "border_width": 2,
-                "border_color": AppColors.PRIMARY,
-                "text_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
-                "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
-                "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                "height": AppStyles.BUTTON_HEIGHT
-            },
-            "ghost": {
-                "fg_color": "transparent",
-                "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
-                "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
-                "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                "height": AppStyles.BUTTON_HEIGHT
+        try:
+            # Define button styles
+            styles = {
+                "primary": {
+                    "fg_color": (AppColors.PRIMARY, AppColors.PRIMARY_DARK),
+                    "hover_color": (AppColors.PRIMARY_DARK, AppColors.PRIMARY),
+                    "text_color": "white",
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
+                    "height": AppStyles.BUTTON_HEIGHT
+                },
+                "secondary": {
+                    "fg_color": (AppColors.SECONDARY, AppColors.SECONDARY_DARK),
+                    "hover_color": (AppColors.SECONDARY_DARK, AppColors.SECONDARY),
+                    "text_color": "white",
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
+                    "height": AppStyles.BUTTON_HEIGHT
+                },
+                "success": {
+                    "fg_color": (AppColors.SUCCESS, AppColors.SUCCESS_DARK),
+                    "hover_color": (AppColors.SUCCESS_DARK, AppColors.SUCCESS),
+                    "text_color": "white",
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
+                    "height": AppStyles.BUTTON_HEIGHT
+                },
+                "outline": {
+                    "fg_color": "transparent",
+                    "border_width": 2,
+                    "border_color": AppColors.PRIMARY,
+                    "text_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
+                    "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
+                    "height": AppStyles.BUTTON_HEIGHT
+                },
+                "ghost": {
+                    "fg_color": "transparent",
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
+                    "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
+                    "height": AppStyles.BUTTON_HEIGHT
+                }
             }
-        }
 
-        # Get the style configuration
-        style_config = styles.get(style, styles["primary"])
-        style_config.update(kwargs)
+            # Get the style configuration
+            style_config = styles.get(style, styles["primary"])
+            style_config.update(kwargs)
 
-        super().__init__(parent, **style_config)
+            super().__init__(parent, **style_config)
+
+        except Exception as e:
+            # Fallback to basic button if styling fails
+            print(f"Warning: StyledButton creation failed: {e}")
+            super().__init__(parent, **kwargs)
 
 class StyledEntry(ctk.CTkEntry):
     """An entry field with modern styling."""
