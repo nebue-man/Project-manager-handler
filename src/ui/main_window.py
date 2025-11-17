@@ -277,14 +277,16 @@ class MainWindow(ctk.CTk):
         self.settings_frame.grid_columnconfigure(0, weight=1)
         self.settings_frame.grid_rowconfigure(0, weight=1)
 
-        # Settings content (placeholder)
-        settings_label = ctk.CTkLabel(
+        # Settings button
+        settings_btn = ctk.CTkButton(
             self.settings_frame,
-            text="Settings View\n\nConfigure application preferences\n\n(Feature coming soon)",
-            font=ctk.CTkFont(size=16),
-            justify="center"
+            text="⚙️ Open Settings",
+            command=self._open_settings,
+            width=200,
+            height=50,
+            font=ctk.CTkFont(size=16)
         )
-        settings_label.grid(row=0, column=0, pady=50)
+        settings_btn.grid(row=0, column=0, pady=50)
 
         # View reference
         self.views["Settings"] = self.settings_frame
