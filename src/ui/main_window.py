@@ -15,9 +15,30 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.helpers import format_date, calculate_days_remaining, get_priority_color, get_status_color
 from utils.config import config
-from utils.styles import AppColors, AppFonts, AppStyles, StyledFrame, StyledButton, StyledEntry, StyledLabel
-from utils.animations import animator, AnimationType
-from ui.components.interactive import AnimatedButton, AnimatedCard, SmoothProgressBar
+
+# Try to import enhanced components, fall back to basic ones if not available
+try:
+    from utils.styles import AppColors, AppFonts, AppStyles, StyledFrame, StyledButton, StyledEntry, StyledLabel
+    from utils.animations import animator, AnimationType
+    from ui.components.interactive import AnimatedButton, AnimatedCard, SmoothProgressBar
+    ENHANCED_UI = True
+except ImportError:
+    print("Warning: Enhanced UI components not available, using basic components")
+    # Fallback to basic components
+    import customtkinter as ctk
+    AppColors = None
+    AppFonts = None
+    AppStyles = None
+    StyledFrame = ctk.CTkFrame
+    StyledButton = ctk.CTkButton
+    StyledEntry = ctk.CTkEntry
+    StyledLabel = ctk.CTkLabel
+    animator = None
+    AnimationType = None
+    AnimatedButton = StyledButton
+    AnimatedCard = StyledFrame
+    SmoothProgressBar = None
+    ENHANCED_UI = False
 
 class MainWindow(ctk.CTk):
     """Main application window."""
