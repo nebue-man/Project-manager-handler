@@ -578,17 +578,27 @@ class MainWindow(ctk.CTk):
             messagebox.showerror("Error", f"Failed to refresh learnings: {e}")
 
     def _create_project_card(self, project: Dict[str, Any], row: int):
-        """Create an enhanced project card widget."""
-        # Modern card frame with hover effects
-        card = StyledFrame(
+        """Create an enhanced animated project card widget."""
+        # Modern animated card frame with hover effects
+        card = AnimatedCard(
             self.projects_container,
             fg_color=(AppColors.WHITE, AppColors.GRAY_800),
             border_width=1,
             border_color=(AppColors.GRAY_200, AppColors.GRAY_700),
-            corner_radius=AppStyles.CARD_CORNER_RADIUS
+            corner_radius=AppStyles.CARD_CORNER_RADIUS + 4,
+            hover_lift=True,
+            hover_highlight=True
         )
         card.grid(row=row, column=0, padx=12, pady=12, sticky="ew")
         card.grid_columnconfigure(1, weight=1)
+
+        # Add click animation
+        def on_card_click(event):
+            try:
+                animator.pulse(card, duration=0.2, scale=1.02)
+            except:
+                pass
+        card.bind("<Button-1>", on_card_click)
 
         # Priority indicator with modern design
         priority_color = get_priority_color(project['priority'])
