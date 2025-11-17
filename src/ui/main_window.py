@@ -778,6 +778,11 @@ class MainWindow(ctk.CTk):
             print(f"Error opening settings dialog: {e}")  # Debug print
             messagebox.showerror("Error", f"Failed to open settings dialog: {e}")
 
+    def _show_filters(self):
+        """Show filter dialog."""
+        # For now, just show a simple filter
+        messagebox.showinfo("Filters", "Advanced filters coming soon! You'll be able to filter by:\n• Status (Active, Completed, Paused)\n• Priority (High, Medium, Low)\n• Tags\n• Date ranges\n• Progress percentage")
+
     def _on_settings_changed(self):
         """Handle settings change callback."""
         # Refresh UI elements that depend on settings
