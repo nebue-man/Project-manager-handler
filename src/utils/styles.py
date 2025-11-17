@@ -253,16 +253,22 @@ class StyledEntry(ctk.CTkEntry):
     """An entry field with modern styling."""
 
     def __init__(self, parent, **kwargs):
-        default_style = {
-            "corner_radius": AppStyles.INPUT_CORNER_RADIUS,
-            "border_width": AppStyles.INPUT_BORDER_WIDTH,
-            "border_color": AppColors.INPUT_BORDER_COLOR,
-            "height": AppStyles.INPUT_HEIGHT,
-            "font": AppFonts.BODY
-        }
+        try:
+            default_style = {
+                "corner_radius": AppStyles.INPUT_CORNER_RADIUS,
+                "border_width": AppStyles.INPUT_BORDER_WIDTH,
+                "border_color": AppColors.INPUT_BORDER_COLOR,
+                "height": AppStyles.INPUT_HEIGHT,
+                "font": AppFonts.get_font(12, "normal")
+            }
 
-        default_style.update(kwargs)
-        super().__init__(parent, **default_style)
+            default_style.update(kwargs)
+            super().__init__(parent, **default_style)
+
+        except Exception as e:
+            # Fallback to basic entry if styling fails
+            print(f"Warning: StyledEntry creation failed: {e}")
+            super().__init__(parent, **kwargs)
 
 class StyledLabel(ctk.CTkLabel):
     """A label with modern styling options."""
