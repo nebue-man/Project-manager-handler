@@ -593,6 +593,9 @@ class MainWindow(ctk.CTk):
         try:
             from .dialogs.add_learning import AddLearningDialog
 
+            # Ensure any existing dialogs are properly closed
+            self.update_idletasks()
+
             dialog = AddLearningDialog(
                 parent=self,
                 learning_model=self.learning_model,
@@ -604,6 +607,7 @@ class MainWindow(ctk.CTk):
         except ImportError:
             messagebox.showerror("Error", "Add learning dialog not available.")
         except Exception as e:
+            print(f"Error opening add learning dialog: {e}")  # Debug print
             messagebox.showerror("Error", f"Failed to open add learning dialog: {e}")
 
     def _open_settings(self):
