@@ -52,9 +52,13 @@ class AddLearningDialog(ctk.CTkToplevel):
         self.minsize(500, 600)
         self.resizable(True, True)
 
-        # Make dialog modal
+        # Make dialog modal (with error handling)
         self.transient(parent)
-        self.grab_set()
+        try:
+            self.grab_set()
+        except Exception as e:
+            # If grab_set fails, continue without modal behavior
+            print(f"Warning: Could not set modal behavior: {e}")
 
         # Configure grid
         self.grid_columnconfigure(0, weight=1)
