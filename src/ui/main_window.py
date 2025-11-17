@@ -143,20 +143,31 @@ class MainWindow(ctk.CTk):
         ]
 
         for i, (text, icon, color) in enumerate(nav_items, start=2):
-            # Animated nav button with hover effects
-            btn = AnimatedButton(
-                self.sidebar,
-                style="ghost",
-                text=f"  {icon}  {text}",
-                command=lambda t=text: self._nav_button_clicked(t),
-                width=230,
-                height=45,
-                font=AppFonts.get_font(13, "normal"),
-                anchor="w",
-                justify="left",
-                hover_effect=True,
-                pulse_on_click=True
-            )
+            # Animated nav button with hover effects (fallback to basic if needed)
+            if self.enhanced_ui:
+                btn = AnimatedButton(
+                    self.sidebar,
+                    style="ghost",
+                    text=f"  {icon}  {text}",
+                    command=lambda t=text: self._nav_button_clicked(t),
+                    width=230,
+                    height=45,
+                    font=AppFonts.get_font(13, "normal") if AppFonts else None,
+                    anchor="w",
+                    justify="left",
+                    hover_effect=True,
+                    pulse_on_click=True
+                )
+            else:
+                btn = StyledButton(
+                    self.sidebar,
+                    text=f"  {icon}  {text}",
+                    command=lambda t=text: self._nav_button_clicked(t),
+                    width=230,
+                    height=45,
+                    anchor="w",
+                    justify="left"
+                )
             btn.grid(row=i, column=0, padx=25, pady=5)
 
             # Store button and its color for hover effects
