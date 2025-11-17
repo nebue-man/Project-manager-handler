@@ -158,26 +158,30 @@ class MainWindow(ctk.CTk):
         )
         actions_label.grid(row=8, column=0, padx=25, pady=(0, 15), sticky="w")
 
-        # Enhanced quick action buttons
-        self.add_project_btn = StyledButton(
+        # Enhanced quick action buttons with animations
+        self.add_project_btn = AnimatedButton(
             self.sidebar,
             style="primary",
             text="➕ New Project",
             command=self._add_project,
             width=230,
             height=42,
-            font=AppFonts.get_font(12, "bold")
+            font=AppFonts.get_font(12, "bold"),
+            hover_effect=True,
+            pulse_on_click=True
         )
         self.add_project_btn.grid(row=9, column=0, padx=25, pady=(0, 10))
 
-        self.add_learning_btn = StyledButton(
+        self.add_learning_btn = AnimatedButton(
             self.sidebar,
             style="outline",
             text="📝 Capture Learning",
             command=self._add_learning,
             width=230,
             height=42,
-            font=AppFonts.get_font(12, "bold")
+            font=AppFonts.get_font(12, "bold"),
+            hover_effect=True,
+            pulse_on_click=True
         )
         self.add_learning_btn.grid(row=10, column=0, padx=25, pady=(0, 20))
 
