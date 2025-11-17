@@ -262,16 +262,40 @@ class StyledLabel(ctk.CTkLabel):
     """A label with modern styling options."""
 
     def __init__(self, parent, variant="body", **kwargs):
-        variant_styles = {
-            "title": {"font": AppFonts.TITLE, "text_color": (AppColors.GRAY_900, AppColors.WHITE)},
-            "heading": {"font": AppFonts.HEADING, "text_color": (AppColors.GRAY_800, AppColors.GRAY_100)},
-            "subheading": {"font": AppFonts.SUBHEADING, "text_color": (AppColors.GRAY_700, AppColors.GRAY_200)},
-            "body": {"font": AppFonts.BODY, "text_color": (AppColors.GRAY_700, AppColors.GRAY_300)},
-            "caption": {"font": AppFonts.CAPTION, "text_color": (AppColors.GRAY_500, AppColors.GRAY_400)},
-            "muted": {"font": AppFonts.SMALL, "text_color": (AppColors.GRAY_400, AppColors.GRAY_500)}
-        }
+        try:
+            variant_styles = {
+                "title": {
+                    "font": AppFonts.get_font(28, "bold"),
+                    "text_color": (AppColors.GRAY_900, AppColors.WHITE)
+                },
+                "heading": {
+                    "font": AppFonts.get_font(20, "bold"),
+                    "text_color": (AppColors.GRAY_800, AppColors.GRAY_100)
+                },
+                "subheading": {
+                    "font": AppFonts.get_font(16, "bold"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_200)
+                },
+                "body": {
+                    "font": AppFonts.get_font(12, "normal"),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300)
+                },
+                "caption": {
+                    "font": AppFonts.get_font(10, "normal"),
+                    "text_color": (AppColors.GRAY_500, AppColors.GRAY_400)
+                },
+                "muted": {
+                    "font": AppFonts.get_font(9, "normal"),
+                    "text_color": (AppColors.GRAY_400, AppColors.GRAY_500)
+                }
+            }
 
-        style_config = variant_styles.get(variant, variant_styles["body"])
-        style_config.update(kwargs)
+            style_config = variant_styles.get(variant, variant_styles["body"])
+            style_config.update(kwargs)
 
-        super().__init__(parent, **style_config)
+            super().__init__(parent, **style_config)
+
+        except Exception as e:
+            # Fallback to basic label if styling fails
+            print(f"Warning: StyledLabel creation failed: {e}")
+            super().__init__(parent, **kwargs)
