@@ -201,10 +201,16 @@ def apply_modern_theme():
     # Use modern color theme
     ctk.set_default_color_theme("blue")
 
-class StyledFrame(ctk.CTkFrame):
+class StyledFrame:
     """A frame with modern styling."""
 
     def __init__(self, parent, **kwargs):
+        if not CTK_AVAILABLE:
+            # Mock frame for testing
+            self.parent = parent
+            self.kwargs = kwargs
+            return
+
         try:
             # Set default styling
             default_style = {
@@ -216,12 +222,21 @@ class StyledFrame(ctk.CTkFrame):
             # Override defaults with provided kwargs
             default_style.update(kwargs)
 
-            super().__init__(parent, **default_style)
+            self._frame = ctk.CTkFrame(parent, **default_style)
 
         except Exception as e:
             # Fallback to basic frame if styling fails
             print(f"Warning: StyledFrame creation failed: {e}")
-            super().__init__(parent, **kwargs)
+            try:
+                self._frame = ctk.CTkFrame(parent, **kwargs)
+            except:
+                self._frame = None
+
+    def __getattr__(self, name):
+        """Delegate all other method calls to the actual frame."""
+        if hasattr(self, '_frame') and self._frame:
+            return getattr(self._frame, name)
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
 class StyledButton(ctk.CTkButton):
     """A button with modern styling."""
