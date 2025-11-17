@@ -85,6 +85,10 @@ class AppFonts:
     @staticmethod
     def get_font(size=12, weight="normal", family="Helvetica"):
         """Get a font with specified properties."""
+        if not CTK_AVAILABLE:
+            # Return mock font for testing
+            return {"family": family, "size": size, "weight": weight}
+
         weight_map = {
             "normal": "normal",
             "bold": "bold",
