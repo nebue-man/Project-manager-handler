@@ -566,96 +566,215 @@ class MainWindow(ctk.CTk):
             messagebox.showerror("Error", f"Failed to refresh learnings: {e}")
 
     def _create_project_card(self, project: Dict[str, Any], row: int):
-        """Create a project card widget."""
-        # Card frame
-        card = ctk.CTkFrame(self.projects_container)
-        card.grid(row=row, column=0, padx=10, pady=10, sticky="ew")
+        """Create an enhanced project card widget."""
+        # Modern card frame with hover effects
+        card = StyledFrame(
+            self.projects_container,
+            fg_color=(AppColors.WHITE, AppColors.GRAY_800),
+            border_width=1,
+            border_color=(AppColors.GRAY_200, AppColors.GRAY_700),
+            corner_radius=AppStyles.CARD_CORNER_RADIUS
+        )
+        card.grid(row=row, column=0, padx=12, pady=12, sticky="ew")
         card.grid_columnconfigure(1, weight=1)
 
-        # Priority indicator
+        # Priority indicator with modern design
         priority_color = get_priority_color(project['priority'])
-        priority_indicator = ctk.CTkFrame(card, width=5, corner_radius=2)
-        priority_indicator.configure(fg_color=priority_color)
-        priority_indicator.grid(row=0, column=0, rowspan=2, padx=(0, 10), sticky="ns")
+        priority_frame = StyledFrame(
+            card,
+            width=4,
+            fg_color=priority_color,
+            corner_radius=2
+        )
+        priority_frame.grid(row=0, column=0, rowspan=3, padx=(0, 15), sticky="ns", pady=15)
+
+        # Main content area
+        content_frame = StyledFrame(
+            card,
+            fg_color="transparent"
+        )
+        content_frame.grid(row=0, column=1, rowspan=3, padx=(0, 15), pady=15, sticky="nsew")
+        content_frame.grid_columnconfigure(0, weight=1)
+
+        # Top row: Project name and status
+        top_row = StyledFrame(
+            content_frame,
+            fg_color="transparent"
+        )
+        top_row.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+
+        # Priority icon
+        priority_icons = {"low": "🟢", "medium": "🟡", "high": "🔴"}
+        priority_icon = StyledLabel(
+            top_row,
+            text=priority_icons.get(project['priority'], "⚪"),
+            variant="caption"
+        )
+        priority_icon.grid(row=0, column=0, padx=(0, 8))
 
         # Project name
-        name_label = ctk.CTkLabel(
-            card,
+        name_label = StyledLabel(
+            top_row,
             text=project['name'],
-            font=ctk.CTkFont(size=16, weight="bold")
+            variant="subheading"
         )
-        name_label.grid(row=0, column=1, padx=(0, 10), pady=(10, 0), sticky="w")
+        name_label.grid(row=0, column=1, sticky="w")
 
-        # Status badge
-        status_color = get_status_color(project['status'])
-        status_badge = ctk.CTkLabel(
-            card,
-            text=project['status'].title(),
-            font=ctk.CTkFont(size=12, weight="bold"),
-            text_color="white",
+        # Status badge with modern styling
+        status_colors = {
+            'planning': AppColors.STATUS_PLANNING,
+            'active': AppColors.STATUS_ACTIVE,
+            'completed': AppColors.STATUS_COMPLETED,
+            'paused': AppColors.STATUS_PAUSED
+        }
+        status_color = status_colors.get(project['status'], AppColors.GRAY_500)
+
+        status_badge = StyledFrame(
+            top_row,
             fg_color=status_color,
-            corner_radius=4
+            corner_radius=12
         )
-        status_badge.grid(row=0, column=2, padx=10, pady=(10, 0))
+        status_badge.grid(row=0, column=2, padx=(15, 0))
 
-        # Description (if exists)
+        status_text = StyledLabel(
+            status_badge,
+            text=project['status'].title(),
+            variant="caption",
+            text_color="white",
+            font=AppFonts.get_font(10, "bold")
+        )
+        status_text.pack(padx=12, pady=4)
+
+        # Description with better typography
         if project['description']:
-            desc_label = ctk.CTkLabel(
-                card,
-                text=project['description'][:100] + "..." if len(project['description']) > 100 else project['description'],
-                font=ctk.CTkFont(size=12),
-                wraplength=400,
+            desc_text = project['description']
+            if len(desc_text) > 120:
+                desc_text = desc_text[:120] + "..."
+
+            desc_label = StyledLabel(
+                content_frame,
+                text=desc_text,
+                variant="body",
+                wraplength=450,
                 justify="left"
             )
-            desc_label.grid(row=1, column=1, columnspan=2, padx=(0, 10), pady=(5, 0), sticky="w")
+            desc_label.grid(row=1, column=0, sticky="w", pady=(0, 12))
 
-        # Progress bar
-        progress_label = ctk.CTkLabel(
-            card,
-            text=f"Progress: {project['progress']}%",
-            font=ctk.CTkFont(size=11)
+        # Progress section with enhanced design
+        progress_frame = StyledFrame(
+            content_frame,
+            fg_color="transparent"
         )
-        progress_label.grid(row=2, column=1, padx=(0, 10), pady=(10, 0), sticky="w")
+        progress_frame.grid(row=2, column=0, sticky="ew", pady=(8, 0))
+        progress_frame.grid_columnconfigure(0, weight=1)
 
-        progress_bar = ctk.CTkProgressBar(card, width=200)
-        progress_bar.set(project['progress'] / 100)
-        progress_bar.grid(row=2, column=1, padx=(0, 10), pady=(15, 10), sticky="w")
+        # Progress label with color
+        progress_color = AppColors.get_progress_color(project['progress'])
+        progress_label = StyledLabel(
+            progress_frame,
+            text=f"📊 Progress: {project['progress']}%",
+            variant="caption",
+            text_color=progress_color
+        )
+        progress_label.grid(row=0, column=0, sticky="w")
 
-        # Deadline info
+        # Progress bar with modern styling
+        progress_bar_frame = StyledFrame(
+            progress_frame,
+            fg_color=(AppColors.GRAY_200, AppColors.GRAY_700),
+            corner_radius=10,
+            height=8
+        )
+        progress_bar_frame.grid(row=1, column=0, sticky="ew", pady=(6, 0))
+
+        # Progress fill
+        progress_fill = StyledFrame(
+            progress_bar_frame,
+            fg_color=progress_color,
+            corner_radius=8
+        )
+        progress_width = int((project['progress'] / 100) * 400)  # Approximate width
+        progress_fill.place(x=0, y=0, relwidth=project['progress']/100, relheight=1)
+
+        # Right side: Deadline and metadata
+        metadata_frame = StyledFrame(
+            card,
+            fg_color="transparent"
+        )
+        metadata_frame.grid(row=0, column=2, rowspan=3, padx=(0, 15), pady=15, sticky="n")
+
+        # Deadline with enhanced styling
         if project['deadline']:
             days_remaining = calculate_days_remaining(project['deadline'])
-            deadline_text = f"Deadline: {format_date(project['deadline'])}"
+            deadline_color = AppColors.get_deadline_urgency_color(days_remaining)
+
+            # Deadline icon and text
+            deadline_frame = StyledFrame(
+                metadata_frame,
+                fg_color=(AppColors.GRAY_50, AppColors.GRAY_900),
+                corner_radius=8,
+                width=140
+            )
+            deadline_frame.grid(row=0, column=0, pady=(0, 10))
+
+            deadline_icon = StyledLabel(
+                deadline_frame,
+                text="📅",
+                variant="caption"
+            )
+            deadline_icon.pack(pady=(8, 2))
+
+            deadline_text = f"{format_date(project['deadline'])}"
             if days_remaining < 0:
-                deadline_text += f" (Overdue by {abs(days_remaining)} days)"
-                deadline_color = "#F44336"
+                deadline_text = f"Overdue"
             elif days_remaining == 0:
-                deadline_text += " (Due today!)"
-                deadline_color = "#FF9800"
+                deadline_text = f"Due Today"
             elif days_remaining <= 3:
-                deadline_text += f" ({days_remaining} days left)"
-                deadline_color = "#FF9800"
+                deadline_text = f"{days_remaining} days"
             else:
-                deadline_text += f" ({days_remaining} days left)"
-                deadline_color = "#4CAF50"
+                deadline_text = f"{days_remaining} days"
 
-            deadline_label = ctk.CTkLabel(
-                card,
+            deadline_label = StyledLabel(
+                deadline_frame,
                 text=deadline_text,
-                font=ctk.CTkFont(size=11, weight="bold"),
-                text_color=deadline_color
+                variant="caption",
+                text_color=deadline_color,
+                font=AppFonts.get_font(9, "bold")
             )
-            deadline_label.grid(row=2, column=2, padx=10, pady=(10, 0), sticky="e")
+            deadline_label.pack(pady=(0, 8))
 
-        # Tags (if any)
+        # Tags with pill design
         if project['tags']:
-            tags_text = " | ".join(project['tags'])
-            tags_label = ctk.CTkLabel(
-                card,
-                text=f"🏷️ {tags_text}",
-                font=ctk.CTkFont(size=10),
-                text_color="#666"
+            tags_frame = StyledFrame(
+                metadata_frame,
+                fg_color="transparent"
             )
-            tags_label.grid(row=3, column=1, columnspan=2, padx=(0, 10), pady=(5, 10), sticky="w")
+            tags_frame.grid(row=1, column=0)
+
+            for i, tag in enumerate(project['tags'][:2]):  # Show max 2 tags
+                tag_frame = StyledFrame(
+                    tags_frame,
+                    fg_color=(AppColors.GRAY_100, AppColors.GRAY_700),
+                    corner_radius=10
+                )
+                tag_frame.grid(row=i, column=0, pady=(0, 4))
+
+                tag_label = StyledLabel(
+                    tag_frame,
+                    text=f"#{tag.lower()}",
+                    variant="caption",
+                    text_color=(AppColors.GRAY_700, AppColors.GRAY_300)
+                )
+                tag_label.pack(padx=8, py=2)
+
+            if len(project['tags']) > 2:
+                more_label = StyledLabel(
+                    tags_frame,
+                    text=f"+{len(project['tags']) - 2} more",
+                    variant="caption",
+                    text_color=(AppColors.GRAY_500, AppColors.GRAY_400)
+                )
+                more_label.grid(row=2, column=0, pady=(2, 0))
 
     def _create_learning_card(self, learning: Dict[str, Any], row: int):
         """Create a learning card widget."""
