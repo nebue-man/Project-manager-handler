@@ -615,6 +615,9 @@ class MainWindow(ctk.CTk):
         try:
             from .dialogs.settings import SettingsDialog
 
+            # Ensure any existing dialogs are properly closed
+            self.update_idletasks()
+
             dialog = SettingsDialog(
                 parent=self,
                 app_config=self.config,
@@ -625,6 +628,7 @@ class MainWindow(ctk.CTk):
         except ImportError:
             messagebox.showerror("Error", "Settings dialog not available.")
         except Exception as e:
+            print(f"Error opening settings dialog: {e}")  # Debug print
             messagebox.showerror("Error", f"Failed to open settings dialog: {e}")
 
     def _on_settings_changed(self):
