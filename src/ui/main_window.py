@@ -60,6 +60,7 @@ class MainWindow(ctk.CTk):
         self.learning_model = learning_model
         self.notification_service = notification_service
         self.config = config
+        self.enhanced_ui = ENHANCED_UI if 'ENHANCED_UI' in globals() else False
 
         # Window configuration
         self.title("Project Manager")
