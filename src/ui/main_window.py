@@ -15,6 +15,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.helpers import format_date, calculate_days_remaining, get_priority_color, get_status_color
 from utils.config import config
+from utils.styles import AppColors, AppFonts, AppStyles, StyledFrame, StyledButton, StyledEntry, StyledLabel
 
 class MainWindow(ctk.CTk):
     """Main application window."""
