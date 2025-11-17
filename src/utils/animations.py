@@ -5,8 +5,29 @@ Provides functions for animating UI elements with different easing functions.
 
 import time
 import threading
-from typing import Callable, Optional, Any
-import customtkinter as ctk
+from typing import Callable, Optional, Any, Union, Tuple
+import math
+
+# Handle headless environment
+try:
+    import customtkinter as ctk
+    GUI_AVAILABLE = True
+except (ImportError, Exception):
+    GUI_AVAILABLE = False
+    # Mock for headless testing
+    class MockCTk:
+        def __init__(self):
+            pass
+        def after(self, *args, **kwargs): pass
+        def configure(self, *args, **kwargs): pass
+        def cget(self, *args): return None
+        def winfo_width(self): return 100
+        def winfo_height(self): return 40
+        def set_opacity(self, opacity): pass
+        def place(self, *args, **kwargs): pass
+        def bind(self, *args, **kwargs): pass
+
+    ctk = MockCTk()
 
 class AnimationType:
     """Animation types with easing functions."""
