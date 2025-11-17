@@ -700,23 +700,14 @@ class MainWindow(ctk.CTk):
         )
         progress_label.grid(row=0, column=0, sticky="w")
 
-        # Progress bar with modern styling
-        progress_bar_frame = StyledFrame(
+        # Smooth animated progress bar
+        progress_bar = SmoothProgressBar(
             progress_frame,
-            fg_color=(AppColors.GRAY_200, AppColors.GRAY_700),
-            corner_radius=10,
+            width=400,
             height=8
         )
-        progress_bar_frame.grid(row=1, column=0, sticky="ew", pady=(6, 0))
-
-        # Progress fill
-        progress_fill = StyledFrame(
-            progress_bar_frame,
-            fg_color=progress_color,
-            corner_radius=8
-        )
-        progress_width = int((project['progress'] / 100) * 400)  # Approximate width
-        progress_fill.place(x=0, y=0, relwidth=project['progress']/100, relheight=1)
+        progress_bar.grid(row=1, column=0, sticky="ew", pady=(6, 0))
+        progress_bar.set_progress(project['progress'], animated=True)
 
         # Right side: Deadline and metadata
         metadata_frame = StyledFrame(
