@@ -22,7 +22,14 @@ class AnimatedButton(StyledButton):
         self.hover_effect = hover_effect
         self.original_color = kwargs.get('fg_color', AppColors.PRIMARY)
 
-        super().__init__(parent, **kwargs)
+        try:
+            super().__init__(parent, **kwargs)
+            # Add hover effect
+            if self.hover_effect:
+                self._add_hover_effect()
+        except Exception as e:
+            print(f"Warning: AnimatedButton creation failed: {e}")
+            super().__init__(parent, **kwargs)
 
         # Add hover effect
         if self.hover_effect:
