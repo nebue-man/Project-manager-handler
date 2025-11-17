@@ -360,19 +360,48 @@ class AddProjectDialog(ctk.CTkToplevel):
 
     def _center_dialog(self, parent):
         """Center dialog relative to parent window."""
-        self.update_idletasks()
-        parent_width = parent.winfo_width()
-        parent_height = parent.winfo_height()
-        parent_x = parent.winfo_rootx()
-        parent_y = parent.winfo_rooty()
+        try:
+            self.update_idletasks()
 
-        dialog_width = self.winfo_width()
-        dialog_height = self.winfo_height()
+            # Ensure parent window is properly mapped
+            parent.update_idletasks()
 
-        x = parent_x + (parent_width // 2) - (dialog_width // 2)
-        y = parent_y + (parent_height // 2) - (dialog_height // 2)
+            parent_width = parent.winfo_width()
+            parent_height = parent.winfo_height()
+            parent_x = parent.winfo_rootx()
+            parent_y = parent.winfo_rooty()
 
-        self.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
+            dialog_width = self.winfo_width()
+            dialog_height = self.winfo_height()
+
+            # Handle case where parent dimensions are 0
+            if parent_width <= 1:
+                parent_width = 1200  # Default width
+            if parent_height <= 1:
+                parent_height = 800  # Default height
+
+            # Calculate center position
+            x = parent_x + (parent_width // 2) - (dialog_width // 2)
+            y = parent_y + (parent_height // 2) - (dialog_height // 2)
+
+            # Ensure dialog is visible on screen
+            screen_width = parent.winfo_screenwidth()
+            screen_height = parent.winfo_screenheight()
+
+            if x < 0:
+                x = 0
+            if y < 0:
+                y = 0
+            if x + dialog_width > screen_width:
+                x = screen_width - dialog_width
+            if y + dialog_height > screen_height:
+                y = screen_height - dialog_height
+
+            self.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
+        except Exception as e:
+            print(f"Warning: Could not center dialog: {e}")
+            # Fall back to center on screen
+            self.geometry("+100+100")
 
 class EditProjectDialog(AddProjectDialog):
     """Dialog for editing existing projects."""
