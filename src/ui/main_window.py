@@ -194,48 +194,118 @@ class MainWindow(ctk.CTk):
         self.status_label.grid(row=0, column=0, padx=15, pady=10)
 
     def _create_main_content(self):
-        """Create the main content area."""
-        # Main content frame
-        self.main_content = ctk.CTkFrame(self)
+        """Create the main content area with enhanced styling."""
+        # Main content frame with background
+        self.main_content = StyledFrame(
+            self,
+            fg_color=("#ffffff", "#1e1e1e"),
+            corner_radius=0
+        )
         self.main_content.grid(row=0, column=1, sticky="nsew")
         self.main_content.grid_columnconfigure(0, weight=1)
         self.main_content.grid_rowconfigure(1, weight=1)
 
-        # Header frame
-        self.header_frame = ctk.CTkFrame(self.main_content, height=60)
-        self.header_frame.grid(row=0, column=0, sticky="ew", padx=10, pady=(10, 0))
-        self.header_frame.grid_columnconfigure(0, weight=1)
-        self.header_frame.grid_columnconfigure(2, weight=1)
-
-        # Page title
-        self.page_title = ctk.CTkLabel(
-            self.header_frame,
-            text="Projects",
-            font=ctk.CTkFont(size=28, weight="bold")
+        # Enhanced header frame with gradient effect
+        self.header_frame = StyledFrame(
+            self.main_content,
+            height=80,
+            fg_color=(AppColors.GRAY_50, AppColors.GRAY_900),
+            corner_radius=0
         )
-        self.page_title.grid(row=0, column=0, padx=20, pady=15, sticky="w")
+        self.header_frame.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
+        self.header_frame.grid_columnconfigure(1, weight=1)
 
-        # Search bar
+        # Left section: Page title with subtitle
+        title_frame = StyledFrame(
+            self.header_frame,
+            fg_color="transparent"
+        )
+        title_frame.grid(row=0, column=0, padx=30, pady=20, sticky="w")
+
+        self.page_title = StyledLabel(
+            title_frame,
+            text="📁 Projects",
+            variant="title"
+        )
+        self.page_title.grid(row=0, column=0, sticky="w")
+
+        self.page_subtitle = StyledLabel(
+            title_frame,
+            text="Manage your active projects and track progress",
+            variant="caption"
+        )
+        self.page_subtitle.grid(row=1, column=0, sticky="w", pady=(5, 0))
+
+        # Center section: Enhanced search bar
+        search_container = StyledFrame(
+            self.header_frame,
+            width=400,
+            fg_color="transparent"
+        )
+        search_container.grid(row=0, column=1, pady=20)
+
         self.search_var = tk.StringVar()
         self.search_var.trace('w', self._on_search_change)
-        self.search_entry = ctk.CTkEntry(
-            self.header_frame,
-            placeholder_text="Search projects and learnings...",
-            textvariable=self.search_var,
-            width=300,
-            height=35
-        )
-        self.search_entry.grid(row=0, column=1, padx=20, pady=15)
 
-        # Refresh button
-        self.refresh_btn = ctk.CTkButton(
+        # Search entry with icon
+        search_frame = StyledFrame(
+            search_container,
+            fg_color=(AppColors.WHITE, AppColors.GRAY_800),
+            corner_radius=AppStyles.INPUT_CORNER_RADIUS,
+            border_width=1,
+            border_color=(AppColors.GRAY_300, AppColors.GRAY_600)
+        )
+        search_frame.pack(fill="x")
+
+        # Search icon
+        search_icon = StyledLabel(
+            search_frame,
+            text="🔍",
+            variant="caption"
+        )
+        search_icon.pack(side="left", padx=(15, 5))
+
+        # Search entry
+        self.search_entry = StyledEntry(
+            search_frame,
+            placeholder_text="Search projects, learnings, tags...",
+            textvariable=self.search_var,
+            border_width=0,
+            fg_color="transparent",
+            font=AppFonts.get_font(13)
+        )
+        self.search_entry.pack(side="left", fill="x", expand=True, padx=5, pady=12)
+
+        # Right section: Action buttons
+        actions_frame = StyledFrame(
             self.header_frame,
+            fg_color="transparent"
+        )
+        actions_frame.grid(row=0, column=2, padx=30, pady=20, sticky="e")
+
+        # Refresh button with enhanced styling
+        self.refresh_btn = StyledButton(
+            actions_frame,
+            style="ghost",
             text="🔄 Refresh",
             command=self._refresh_all,
             width=100,
-            height=35
+            height=40,
+            font=AppFonts.get_font(11, "bold")
         )
-        self.refresh_btn.grid(row=0, column=2, padx=20, pady=15, sticky="e")
+        self.refresh_btn.pack(side="right", padx=(10, 0))
+
+        # Filter button (new)
+        self.filter_btn = StyledButton(
+            actions_frame,
+            style="outline",
+            text="⚡ Filter",
+            command=self._show_filters,
+            width=100,
+            height=40,
+            font=AppFonts.get_font(11, "bold")
+        )
+        self.filter_btn.pack(side="right")
 
         # Content frame (will hold different views)
         self.content_frame = ctk.CTkFrame(self.main_content)
