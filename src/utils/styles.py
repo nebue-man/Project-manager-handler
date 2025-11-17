@@ -335,11 +335,303 @@ def get_deadline_urgency_color(days_remaining):
 
 def apply_modern_theme():
     """Apply modern theme settings to CustomTkinter."""
+    if not CTK_AVAILABLE:
+        return
+
     # Set appearance mode based on system preference initially
     ctk.set_appearance_mode("system")
 
     # Use modern color theme
     ctk.set_default_color_theme("blue")
+
+# Enhanced Color and Visual Hierarchy Utilities
+class ColorUtils:
+    """Utilities for working with the enhanced color system."""
+
+    @staticmethod
+    def get_status_color(status: str) -> str:
+        """Get color for project status."""
+        status_colors = {
+            "planning": AppColors.STATUS_PLANNING,
+            "active": AppColors.STATUS_ACTIVE,
+            "completed": AppColors.STATUS_COMPLETED,
+            "paused": AppColors.STATUS_PAUSED,
+            "cancelled": AppColors.STATUS_CANCELLED,
+        }
+        return status_colors.get(status.lower(), AppColors.GRAY_500)
+
+    @staticmethod
+    def get_priority_color(priority: str) -> str:
+        """Get color for project priority."""
+        priority_colors = {
+            "low": AppColors.PRIORITY_LOW,
+            "medium": AppColors.PRIORITY_MEDIUM,
+            "high": AppColors.PRIORITY_HIGH,
+            "critical": AppColors.PRIORITY_CRITICAL,
+        }
+        return priority_colors.get(priority.lower(), AppColors.GRAY_500)
+
+    @staticmethod
+    def create_gradient(start_color: str, end_color: str, steps: int = 10) -> list:
+        """Create a gradient between two colors."""
+        def hex_to_rgb(hex_color):
+            if hex_color.startswith('#'):
+                hex_color = hex_color[1:]
+            return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+        def rgb_to_hex(rgb):
+            return '#{:02x}{:02x}{:02x}'.format(*rgb)
+
+        try:
+            start_rgb = hex_to_rgb(start_color)
+            end_rgb = hex_to_rgb(end_color)
+            gradient = []
+
+            for i in range(steps):
+                t = i / (steps - 1) if steps > 1 else 0
+                r = int(start_rgb[0] + (end_rgb[0] - start_rgb[0]) * t)
+                g = int(start_rgb[1] + (end_rgb[1] - start_rgb[1]) * t)
+                b = int(start_rgb[2] + (end_rgb[2] - start_rgb[2]) * t)
+                gradient.append(rgb_to_hex((r, g, b)))
+
+            return gradient
+        except:
+            return [start_color, end_color]
+
+    @staticmethod
+    def get_contrast_color(bg_color: str) -> str:
+        """Get a contrasting color for text on background."""
+        def hex_to_rgb(hex_color):
+            if hex_color.startswith('#'):
+                hex_color = hex_color[1:]
+            return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+        try:
+            rgb = hex_to_rgb(bg_color)
+            # Calculate luminance
+            luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255
+            return AppColors.BLACK if luminance > 0.5 else AppColors.WHITE
+        except:
+            return AppColors.BLACK
+
+    @staticmethod
+    def adjust_brightness(color: str, factor: float) -> str:
+        """Adjust the brightness of a color."""
+        def hex_to_rgb(hex_color):
+            if hex_color.startswith('#'):
+                hex_color = hex_color[1:]
+            return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+        def rgb_to_hex(rgb):
+            return '#{:02x}{:02x}{:02x}'.format(*rgb)
+
+        try:
+            rgb = hex_to_rgb(color)
+            adjusted_rgb = tuple(max(0, min(255, int(c * factor))) for c in rgb)
+            return rgb_to_hex(adjusted_rgb)
+        except:
+            return color
+
+class VisualHierarchy:
+    """Defines visual hierarchy rules for consistent UI design."""
+
+    # Z-index layers for proper stacking
+    LAYERS = {
+        "background": AppStyles.Z_BASE,
+        "content": AppStyles.Z_RAISED,
+        "dropdown": AppStyles.Z_DROPDOWN,
+        "sticky": AppStyles.Z_STICKY,
+        "fixed": AppStyles.Z_FIXED,
+        "modal_backdrop": AppStyles.Z_MODAL_BACKDROP,
+        "modal": AppStyles.Z_MODAL,
+        "popover": AppStyles.Z_POPOVER,
+        "tooltip": AppStyles.Z_TOOLTIP,
+        "toast": AppStyles.Z_TOAST,
+    }
+
+    # Typography hierarchy
+    TYPOGRAPHY = {
+        "display": {"variant": "h1", "size": "5xl", "weight": "bold"},
+        "heading_1": {"variant": "h1", "size": "4xl", "weight": "bold"},
+        "heading_2": {"variant": "h2", "size": "3xl", "weight": "bold"},
+        "heading_3": {"variant": "h3", "size": "2xl", "weight": "bold"},
+        "heading_4": {"variant": "h4", "size": "xl", "weight": "bold"},
+        "heading_5": {"variant": "h5", "size": "lg", "weight": "bold"},
+        "heading_6": {"variant": "h6", "size": "md", "weight": "bold"},
+        "subtitle": {"variant": "subtitle", "size": "lg", "weight": "normal"},
+        "body_large": {"variant": "body-large", "size": "lg", "weight": "normal"},
+        "body": {"variant": "body", "size": "md", "weight": "normal"},
+        "body_small": {"variant": "body-small", "size": "sm", "weight": "normal"},
+        "caption": {"variant": "caption", "size": "sm", "weight": "normal"},
+        "overline": {"variant": "overline", "size": "xs", "weight": "bold"},
+        "label": {"variant": "body", "size": "sm", "weight": "medium"},
+        "help": {"variant": "muted", "size": "xs", "weight": "normal"},
+    }
+
+    # Component visual hierarchy
+    COMPONENTS = {
+        "primary_action": {"style": "primary", "size": "md", "importance": "high"},
+        "secondary_action": {"style": "secondary", "size": "md", "importance": "medium"},
+        "tertiary_action": {"style": "outline", "size": "md", "importance": "low"},
+        "danger_action": {"style": "error", "size": "md", "importance": "high"},
+        "success_action": {"style": "success", "size": "md", "importance": "medium"},
+        "fab": {"style": "fab", "size": "lg", "importance": "high"},
+        "icon_button": {"style": "ghost", "size": "sm", "importance": "low"},
+        "link": {"style": "link", "size": "md", "importance": "low"},
+    }
+
+    # Card elevation hierarchy
+    ELEVATION = {
+        "flat": AppStyles.ELEVATION_NONE,
+        "low": AppStyles.ELEVATION_LOW,
+        "medium": AppStyles.ELEVATION_MEDIUM,
+        "high": AppStyles.ELEVATION_HIGH,
+        "highest": AppStyles.ELEVATION_HIGHEST,
+    }
+
+    # Border radius hierarchy
+    BORDER_RADIUS = {
+        "none": AppStyles.RADIUS_NONE,
+        "small": AppStyles.RADIUS_SM,
+        "medium": AppStyles.RADIUS_BASE,
+        "large": AppStyles.RADIUS_MD,
+        "xl": AppStyles.RADIUS_LG,
+        "2xl": AppStyles.RADIUS_XL,
+        "3xl": AppStyles.RADIUS_2XL,
+        "full": AppStyles.RADIUS_FULL,
+    }
+
+    # Spacing hierarchy
+    SPACING = {
+        "none": 0,
+        "xs": AppStyles.SPACING_XS,
+        "sm": AppStyles.SPACING_SM,
+        "md": AppStyles.SPACING_MD,
+        "lg": AppStyles.SPACING_LG,
+        "xl": AppStyles.SPACING_XL,
+        "2xl": AppStyles.SPACING_XXL,
+        "3xl": AppStyles.SPACING_XXXL,
+    }
+
+    @staticmethod
+    def get_layer_z_index(layer_name: str) -> int:
+        """Get z-index for a layer name."""
+        return VisualHierarchy.LAYERS.get(layer_name, AppStyles.Z_BASE)
+
+    @staticmethod
+    def get_typography_scale(text_type: str) -> dict:
+        """Get typography configuration for text type."""
+        return VisualHierarchy.TYPOGRAPHY.get(text_type, VisualHierarchy.TYPOGRAPHY["body"])
+
+    @staticmethod
+    def get_component_style(component_type: str) -> dict:
+        """Get style configuration for component type."""
+        return VisualHierarchy.COMPONENTS.get(component_type, VisualHierarchy.COMPONENTS["primary_action"])
+
+    @staticmethod
+    def get_elevation(elevation_level: str) -> int:
+        """Get elevation value for level."""
+        return VisualHierarchy.ELEVATION.get(elevation_level, AppStyles.ELEVATION_LOW)
+
+    @staticmethod
+    def get_border_radius(radius_size: str) -> int:
+        """Get border radius value for size."""
+        return VisualHierarchy.BORDER_RADIUS.get(radius_size, AppStyles.RADIUS_BASE)
+
+    @staticmethod
+    def get_spacing(spacing_size: str) -> int:
+        """Get spacing value for size."""
+        return VisualHierarchy.SPACING.get(spacing_size, AppStyles.SPACING_MD)
+
+class ThemePresets:
+    """Predefined theme combinations for consistent styling."""
+
+    @staticmethod
+    def get_project_card_colors(project_data: dict) -> dict:
+        """Get color scheme for a project card based on its data."""
+        priority = project_data.get("priority", "medium")
+        status = project_data.get("status", "active")
+        progress = project_data.get("progress", 0)
+
+        colors = {
+            "primary": ColorUtils.get_priority_color(priority),
+            "secondary": ColorUtils.get_status_color(status),
+            "progress": get_progress_color(progress),
+            "text": (AppColors.GRAY_800, AppColors.GRAY_200),
+            "muted": (AppColors.GRAY_500, AppColors.GRAY_400),
+            "background": (AppColors.WHITE, AppColors.GRAY_850),
+            "border": (AppColors.GRAY_200, AppColors.GRAY_700),
+        }
+
+        return colors
+
+    @staticmethod
+    def get_learning_card_colors(learning_data: dict) -> dict:
+        """Get color scheme for a learning card."""
+        tags = learning_data.get("tags", [])
+        has_project = learning_data.get("project_id") is not None
+
+        colors = {
+            "primary": AppColors.ACCENT_PURPLE if has_project else AppColors.ACCENT_TEAL,
+            "secondary": AppColors.SECONDARY if tags else AppColors.GRAY_400,
+            "text": (AppColors.GRAY_800, AppColors.GRAY_200),
+            "muted": (AppColors.GRAY_500, AppColors.GRAY_400),
+            "background": (AppColors.WHITE, AppColors.GRAY_850),
+            "border": (AppColors.GRAY_200, AppColors.GRAY_700),
+        }
+
+        return colors
+
+    @staticmethod
+    def get_sidebar_colors() -> dict:
+        """Get color scheme for sidebar navigation."""
+        return {
+            "background": (AppColors.GRAY_50, AppColors.GRAY_900),
+            "text": (AppColors.GRAY_700, AppColors.GRAY_300),
+            "text_active": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
+            "text_hover": (AppColors.GRAY_900, AppColors.GRAY_100),
+            "border": (AppColors.GRAY_200, AppColors.GRAY_700),
+            "accent": AppColors.PRIMARY,
+            "success": AppColors.SUCCESS,
+            "warning": AppColors.WARNING,
+            "error": AppColors.ERROR,
+        }
+
+    @staticmethod
+    def get_status_colors() -> dict:
+        """Get comprehensive status color mapping."""
+        return {
+            "planning": {
+                "bg": AppColors.STATUS_PLANNING,
+                "text": AppColors.WHITE,
+                "border": AppColors.PRIMARY_DARK,
+            },
+            "active": {
+                "bg": AppColors.STATUS_ACTIVE,
+                "text": AppColors.WHITE,
+                "border": AppColors.SUCCESS_DARK,
+            },
+            "completed": {
+                "bg": AppColors.STATUS_COMPLETED,
+                "text": AppColors.WHITE,
+                "border": AppColors.GRAY_700,
+            },
+            "paused": {
+                "bg": AppColors.STATUS_PAUSED,
+                "text": AppColors.WHITE,
+                "border": AppColors.WARNING_DARK,
+            },
+            "cancelled": {
+                "bg": AppColors.STATUS_CANCELLED,
+                "text": AppColors.WHITE,
+                "border": AppColors.GRAY_700,
+            },
+        }
+
+# Create global instances for easy access
+color_utils = ColorUtils()
+visual_hierarchy = VisualHierarchy()
+theme_presets = ThemePresets()
 
 class StyledFrame:
     """A frame with modern styling."""
