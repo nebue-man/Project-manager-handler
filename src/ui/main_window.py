@@ -572,6 +572,9 @@ class MainWindow(ctk.CTk):
         try:
             from .dialogs.add_project import AddProjectDialog
 
+            # Ensure any existing dialogs are properly closed
+            self.update_idletasks()
+
             dialog = AddProjectDialog(
                 parent=self,
                 project_model=self.project_model,
@@ -582,6 +585,7 @@ class MainWindow(ctk.CTk):
         except ImportError:
             messagebox.showerror("Error", "Add project dialog not available.")
         except Exception as e:
+            print(f"Error opening add project dialog: {e}")  # Debug print
             messagebox.showerror("Error", f"Failed to open add project dialog: {e}")
 
     def _add_learning(self):
