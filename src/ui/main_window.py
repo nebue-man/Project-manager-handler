@@ -1043,10 +1043,27 @@ class MainWindow(ctk.CTk):
         messagebox.showinfo("Settings", "Settings changed. Some changes may require restart.")
 
     def _refresh_all(self):
-        """Refresh all data displays."""
-        self._refresh_projects()
-        self._refresh_learnings()
-        messagebox.showinfo("Refresh", "Data refreshed successfully!")
+        """Refresh all data displays with smooth feedback."""
+        try:
+            # Animate refresh button
+            animator.pulse(self.refresh_btn, duration=0.3, scale=1.1)
+
+            # Add loading state (optional enhancement)
+            self.page_subtitle.configure(text="Refreshing data...")
+
+            # Refresh data
+            self._refresh_projects()
+            self._refresh_learnings()
+
+            # Show success feedback
+            self.page_subtitle.configure(text="All data refreshed successfully!")
+            self.after(2000, lambda: self.page_subtitle.configure(
+                text="Manage your active projects and track progress"
+            ))
+
+        except Exception as e:
+            self.page_subtitle.configure(text="Error refreshing data")
+            print(f"Error during refresh: {e}")
 
     def _on_search_change(self, *args):
         """Handle search input change."""
