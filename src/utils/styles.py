@@ -379,63 +379,130 @@ class StyledFrame:
         raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
 
 class StyledButton:
-    """A button with modern styling."""
+    """A button with enhanced modern styling and better visual feedback."""
 
-    def __init__(self, parent, style="primary", **kwargs):
+    def __init__(self, parent, style="primary", size="md", **kwargs):
         if not CTK_AVAILABLE:
             # Mock button for testing
             self.parent = parent
             self.style = style
+            self.size = size
             self.kwargs = kwargs
             return
 
         try:
-            # Define button styles
+            # Define size configurations
+            sizes = {
+                "xs": {
+                    "height": 32,
+                    "font": AppFonts.get_font(11, "normal"),
+                    "corner_radius": 8
+                },
+                "sm": {
+                    "height": 36,
+                    "font": AppFonts.get_font(12, "normal"),
+                    "corner_radius": 10
+                },
+                "md": {
+                    "height": AppStyles.BUTTON_HEIGHT,
+                    "font": AppFonts.get_font(AppStyles.FONT_SIZE_BASE, "normal"),
+                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS
+                },
+                "lg": {
+                    "height": 48,
+                    "font": AppFonts.get_font(16, "normal"),
+                    "corner_radius": 14
+                },
+                "xl": {
+                    "height": 56,
+                    "font": AppFonts.get_font(18, "normal"),
+                    "corner_radius": 16
+                }
+            }
+
+            # Define enhanced button styles with modern colors
             styles = {
                 "primary": {
                     "fg_color": (AppColors.PRIMARY, AppColors.PRIMARY_DARK),
                     "hover_color": (AppColors.PRIMARY_DARK, AppColors.PRIMARY),
-                    "text_color": "white",
-                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                    "height": AppStyles.BUTTON_HEIGHT
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "border_color": (AppColors.PRIMARY, AppColors.PRIMARY_DARK),
                 },
                 "secondary": {
                     "fg_color": (AppColors.SECONDARY, AppColors.SECONDARY_DARK),
                     "hover_color": (AppColors.SECONDARY_DARK, AppColors.SECONDARY),
-                    "text_color": "white",
-                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                    "height": AppStyles.BUTTON_HEIGHT
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "border_color": (AppColors.SECONDARY, AppColors.SECONDARY_DARK),
                 },
                 "success": {
                     "fg_color": (AppColors.SUCCESS, AppColors.SUCCESS_DARK),
                     "hover_color": (AppColors.SUCCESS_DARK, AppColors.SUCCESS),
-                    "text_color": "white",
-                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                    "height": AppStyles.BUTTON_HEIGHT
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "border_color": (AppColors.SUCCESS, AppColors.SUCCESS_DARK),
+                },
+                "warning": {
+                    "fg_color": (AppColors.WARNING, AppColors.WARNING_DARK),
+                    "hover_color": (AppColors.WARNING_DARK, AppColors.WARNING),
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "border_color": (AppColors.WARNING, AppColors.WARNING_DARK),
+                },
+                "error": {
+                    "fg_color": (AppColors.ERROR, AppColors.ERROR_DARK),
+                    "hover_color": (AppColors.ERROR_DARK, AppColors.ERROR),
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "border_color": (AppColors.ERROR, AppColors.ERROR_DARK),
                 },
                 "outline": {
                     "fg_color": "transparent",
-                    "border_width": 2,
-                    "border_color": AppColors.PRIMARY,
+                    "border_width": AppStyles.BORDER_NORMAL,
+                    "border_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
                     "text_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
+                    "hover_color": (AppColors.PRIMARY_ULTRA_LIGHT, AppColors.GRAY_850),
+                    "hover_border_color": (AppColors.PRIMARY_DARK, AppColors.PRIMARY),
+                },
+                "outline-secondary": {
+                    "fg_color": "transparent",
+                    "border_width": AppStyles.BORDER_NORMAL,
+                    "border_color": (AppColors.GRAY_300, AppColors.GRAY_600),
+                    "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
                     "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
-                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                    "height": AppStyles.BUTTON_HEIGHT
+                    "hover_border_color": (AppColors.GRAY_500, AppColors.GRAY_400),
                 },
                 "ghost": {
                     "fg_color": "transparent",
+                    "border_width": AppStyles.BORDER_NONE,
                     "text_color": (AppColors.GRAY_700, AppColors.GRAY_300),
                     "hover_color": (AppColors.GRAY_100, AppColors.GRAY_800),
-                    "corner_radius": AppStyles.BUTTON_CORNER_RADIUS,
-                    "height": AppStyles.BUTTON_HEIGHT
+                },
+                "link": {
+                    "fg_color": "transparent",
+                    "border_width": AppStyles.BORDER_NONE,
+                    "text_color": (AppColors.PRIMARY, AppColors.PRIMARY_LIGHT),
+                    "hover_color": "transparent",
+                    "hover_text_color": (AppColors.PRIMARY_DARK, AppColors.PRIMARY),
+                    "font": AppFonts.get_font(14, "normal"),
+                    "corner_radius": 4,
+                },
+                "fab": {  # Floating Action Button
+                    "fg_color": (AppColors.SECONDARY, AppColors.SECONDARY_DARK),
+                    "hover_color": (AppColors.SECONDARY_DARK, AppColors.SECONDARY),
+                    "text_color": (AppColors.WHITE, AppColors.WHITE),
+                    "corner_radius": 28,  # Circular
+                    "width": 56,
+                    "height": 56,
                 }
             }
 
-            # Get the style configuration
-            style_config = styles.get(style, styles["primary"])
-            style_config.update(kwargs)
+            # Get size configuration
+            size_config = sizes.get(size, sizes["md"])
 
-            self._button = ctk.CTkButton(parent, **style_config)
+            # Get style configuration
+            style_config = styles.get(style, styles["primary"])
+
+            # Merge configurations, with kwargs having highest priority
+            final_config = {**size_config, **style_config, **kwargs}
+
+            self._button = ctk.CTkButton(parent, **final_config)
 
         except Exception as e:
             # Fallback to basic button if styling fails
