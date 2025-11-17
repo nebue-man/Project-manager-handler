@@ -172,41 +172,134 @@ class AppFonts:
 app_fonts = AppFonts()
 
 class AppStyles:
-    """Styling configuration for UI components."""
+    """Modern styling configuration for enhanced visual appeal."""
 
-    # Card Styling
-    CARD_CORNER_RADIUS = 12
+    # Modern Card Styling - More sophisticated design
+    CARD_CORNER_RADIUS = 16          # Softer corners
     CARD_BORDER_WIDTH = 1
-    CARD_BORDER_COLOR = AppColors.GRAY_300
+    CARD_BORDER_COLOR = AppColors.GRAY_200
     CARD_HOVER_BORDER_COLOR = AppColors.PRIMARY
     CARD_SHADOW_COLOR = AppColors.GRAY_400
+    CARD_HOVER_SHADOW_COLOR = AppColors.GRAY_600
+    CARD_PADDING = 20                # More padding for modern look
 
-    # Button Styling
-    BUTTON_CORNER_RADIUS = 8
+    # Elevation levels for cards
+    ELEVATION_NONE = 0
+    ELEVATION_LOW = 2
+    ELEVATION_MEDIUM = 4
+    ELEVATION_HIGH = 8
+    ELEVATION_HIGHEST = 16
+
+    # Modern Button Styling - Professional and clean
+    BUTTON_CORNER_RADIUS = 12        # Rounded but professional
     BUTTON_BORDER_WIDTH = 0
-    BUTTON_HEIGHT = 40
-    BUTTON_PADDING = 20
+    BUTTON_HEIGHT = 44               # Taller for better touch targets
+    BUTTON_PADDING_X = 24            # Horizontal padding
+    BUTTON_PADDING_Y = 12            # Vertical padding
+    BUTTON_FONT_SIZE = 14            # Modern font size
+    BUTTON_TRANSITION_DURATION = 200 # ms
 
-    # Input Field Styling
-    INPUT_CORNER_RADIUS = 8
-    INPUT_BORDER_WIDTH = 1
-    INPUT_BORDER_COLOR = AppColors.GRAY_300
+    # Modern Input Field Styling - Clean and accessible
+    INPUT_CORNER_RADIUS = 10
+    INPUT_BORDER_WIDTH = 2
+    INPUT_BORDER_COLOR = AppColors.GRAY_200
     INPUT_FOCUS_BORDER_COLOR = AppColors.PRIMARY
-    INPUT_HEIGHT = 35
+    INPUT_ERROR_BORDER_COLOR = AppColors.ERROR
+    INPUT_HEIGHT = 44                # Match button height
+    INPUT_PADDING_X = 16
+    INPUT_PADDING_Y = 12
+    INPUT_FONT_SIZE = 14
 
-    # Spacing Constants
-    SPACING_XS = 4
-    SPACING_SM = 8
-    SPACING_MD = 16
-    SPACING_LG = 24
-    SPACING_XL = 32
-    SPACING_XXL = 48
+    # Enhanced Spacing Constants - Better visual rhythm
+    SPACING_XS = 4                  # 0.25rem
+    SPACING_SM = 8                  # 0.5rem
+    SPACING_MD = 16                 # 1rem
+    SPACING_LG = 24                 # 1.5rem
+    SPACING_XL = 32                 # 2rem
+    SPACING_XXL = 48                # 3rem
+    SPACING_XXXL = 64               # 4rem
 
-    # Icon Sizes
+    # Modern Icon Sizes - Better scalability
+    ICON_XS = 12
     ICON_SM = 16
-    ICON_MD = 24
-    ICON_LG = 32
-    ICON_XL = 48
+    ICON_MD = 20
+    ICON_LG = 24
+    ICON_XL = 32
+    ICON_XXL = 48
+    ICON_XXXL = 64
+
+    # Typography Scale - Modern font sizes
+    FONT_SIZE_XS = 10
+    FONT_SIZE_SM = 12
+    FONT_SIZE_BASE = 14
+    FONT_SIZE_LG = 16
+    FONT_SIZE_XL = 18
+    FONT_SIZE_2XL = 24
+    FONT_SIZE_3XL = 30
+    FONT_SIZE_4XL = 36
+    FONT_SIZE_5XL = 48
+
+    # Line Heights - Better readability
+    LINE_HEIGHT_TIGHT = 1.2
+    LINE_HEIGHT_NORMAL = 1.4
+    LINE_HEIGHT_RELAXED = 1.6
+    LINE_HEIGHT_LOOSE = 1.8
+
+    # Animation Durations - Smooth and professional
+    ANIM_FAST = 150          # ms
+    ANIM_NORMAL = 250        # ms
+    ANIM_SLOW = 350          # ms
+    ANIM_VERY_SLOW = 500     # ms
+
+    # Border Widths - Consistent hierarchy
+    BORDER_NONE = 0
+    BORDER_THIN = 1
+    BORDER_NORMAL = 2
+    BORDER_THICK = 3
+    BORDER_THICKER = 4
+
+    # Opacity Levels - For subtle effects
+    OPACITY_HIDDEN = 0.0
+    OPACITY_FAINT = 0.1
+    OPACITY_LIGHT = 0.3
+    OPACITY_MEDIUM = 0.6
+    OPACITY_STRONG = 0.8
+    OPACITY_FULL = 1.0
+
+    # Z-Index Layers - For proper stacking
+    Z_BASE = 0
+    Z_RAISED = 10
+    Z_DROPDOWN = 1000
+    Z_STICKY = 1020
+    Z_FIXED = 1030
+    Z_MODAL_BACKDROP = 1040
+    Z_MODAL = 1050
+    Z_POPOVER = 1060
+    Z_TOOLTIP = 1070
+    Z_TOAST = 1080
+
+    # Border Radius Scale - Consistent rounding
+    RADIUS_NONE = 0
+    RADIUS_SM = 4
+    RADIUS_BASE = 8
+    RADIUS_MD = 12
+    RADIUS_LG = 16
+    RADIUS_XL = 20
+    RADIUS_2XL = 24
+    RADIUS_FULL = 9999
+
+    # Component-Specific Styles
+    SIDEBAR_WIDTH = 280          # Modern sidebar width
+    SIDEBAR_COLLAPSED_WIDTH = 80
+    HEADER_HEIGHT = 64           # Modern header height
+    FOOTER_HEIGHT = 48           # Modern footer height
+
+    # Breakpoints - For responsive design
+    BREAKPOINT_SM = 640          # Small screens
+    BREAKPOINT_MD = 768          # Medium screens
+    BREAKPOINT_LG = 1024         # Large screens
+    BREAKPOINT_XL = 1280         # Extra large screens
+    BREAKPOINT_2XL = 1536        # 2X large screens
 
 def get_progress_color(progress):
     """Get color based on progress percentage."""
