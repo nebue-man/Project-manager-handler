@@ -186,9 +186,30 @@ class ProjectManagerApp:
 
     def create_main_window(self):
         """Create and show the main window."""
-        from ui.main_window import MainWindow
+        if not GUI_AVAILABLE:
+            print("Creating headless main window...")
+            # Create a mock main window for headless operation
+            class MockMainWindow:
+                def __init__(self):
+                    self.project_model = None
+                    self.learning_model = None
+                    self.notification_service = None
+                    self.config = None
+
+                def geometry(self, *args): pass
+                def title(self, *args): pass
+                def protocol(self, *args): pass
+                def _center_window(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+
+            self.main_window = MockMainWindow()
+            return self.main_window
 
         try:
+            from ui.main_window import MainWindow
+
             # Create main window
             self.main_window = MainWindow(
                 self.project_model,
