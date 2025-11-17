@@ -475,13 +475,34 @@ class MainWindow(ctk.CTk):
             self._show_settings_view()
 
     def _show_projects_view(self):
-        """Show projects view."""
-        # Hide all views
-        for view in self.views.values():
-            view.grid_forget()
+        """Show projects view with smooth transition."""
+        # Fade out current view
+        current_visible = None
+        for name, view in self.views.items():
+            if view.winfo_viewable():
+                current_visible = view
+                break
 
-        # Show projects view
-        self.views["Projects"].grid(row=0, column=0, sticky="nsew")
+        # Fade in projects view
+        projects_view = self.views["Projects"]
+        projects_view.grid(row=0, column=0, sticky="nsew")
+
+        # Hide other views
+        for name, view in self.views.items():
+            if name != "Projects":
+                view.grid_forget()
+
+        # Animate view transition
+        try:
+            if current_visible:
+                # Fade out current view
+                current_visible.configure(fg_color=(AppColors.GRAY_100, AppColors.GRAY_900))
+                self.after(100, lambda: current_visible.grid_forget())
+
+            # Fade in projects view
+            projects_view.configure(fg_color=(AppColors.WHITE, AppColors.GRAY_800))
+        except:
+            pass  # Fallback silently
 
     def _show_learnings_view(self):
         """Show learnings view."""
