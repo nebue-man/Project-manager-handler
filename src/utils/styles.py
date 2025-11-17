@@ -70,19 +70,44 @@ class AppFonts:
             "light": "light"
         }
 
-        return ctk.CTkFont(
-            family=family,
-            size=size,
-            weight=weight_map.get(weight, "normal")
-        )
+        try:
+            return ctk.CTkFont(
+                family=family,
+                size=size,
+                weight=weight_map.get(weight, "normal")
+            )
+        except Exception as e:
+            # Fallback if font creation fails
+            print(f"Warning: Font creation failed: {e}")
+            return ("Helvetica", size, weight_map.get(weight, "normal"))
 
-    # Predefined font styles
-    TITLE = get_font(28, "bold")
-    HEADING = get_font(20, "bold")
-    SUBHEADING = get_font(16, "bold")
-    BODY = get_font(12, "normal")
-    CAPTION = get_font(10, "normal")
-    SMALL = get_font(9, "normal")
+    # Predefined font styles (lazy initialization)
+    @property
+    def TITLE(self):
+        return self.get_font(28, "bold")
+
+    @property
+    def HEADING(self):
+        return self.get_font(20, "bold")
+
+    @property
+    def SUBHEADING(self):
+        return self.get_font(16, "bold")
+
+    @property
+    def BODY(self):
+        return self.get_font(12, "normal")
+
+    @property
+    def CAPTION(self):
+        return self.get_font(10, "normal")
+
+    @property
+    def SMALL(self):
+        return self.get_font(9, "normal")
+
+# Create a global instance
+app_fonts = AppFonts()
 
 class AppStyles:
     """Styling configuration for UI components."""
