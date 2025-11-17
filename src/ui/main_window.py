@@ -790,61 +790,151 @@ class MainWindow(ctk.CTk):
                 more_label.grid(row=2, column=0, pady=(2, 0))
 
     def _create_learning_card(self, learning: Dict[str, Any], row: int):
-        """Create a learning card widget."""
-        # Card frame
-        card = ctk.CTkFrame(self.learnings_container)
-        card.grid(row=row, column=0, padx=10, pady=10, sticky="ew")
-        card.grid_columnconfigure(1, weight=1)
+        """Create an enhanced learning card widget with modern styling."""
+        # Modern animated card with gradient effect
+        card = AnimatedCard(
+            self.learnings_container,
+            fg_color=(AppColors.WHITE, AppColors.GRAY_800),
+            border_width=1,
+            border_color=(AppColors.GRAY_200, AppColors.GRAY_700),
+            corner_radius=AppStyles.CARD_CORNER_RADIUS + 2,
+            hover_lift=True,
+            hover_highlight=True
+        )
+        card.grid(row=row, column=0, padx=12, pady=12, sticky="ew")
+        card.grid_columnconfigure(0, weight=1)
 
-        # Learning title
-        title_label = ctk.CTkLabel(
+        # Add click animation
+        def on_card_click(event):
+            try:
+                animator.pulse(card, duration=0.2, scale=1.02)
+            except:
+                pass
+        card.bind("<Button-1>", on_card_click)
+
+        # Main content area
+        content_frame = StyledFrame(
             card,
+            fg_color="transparent"
+        )
+        content_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        content_frame.grid_columnconfigure(0, weight=1)
+
+        # Top row: Title and project badge
+        header_row = StyledFrame(
+            content_frame,
+            fg_color="transparent"
+        )
+        header_row.grid(row=0, column=0, sticky="ew", pady=(0, 12))
+        header_row.grid_columnconfigure(1, weight=1)
+
+        # Learning icon
+        learning_icon = StyledLabel(
+            header_row,
+            text="💡",
+            variant="caption"
+        )
+        learning_icon.grid(row=0, column=0, padx=(0, 8), sticky="w")
+
+        # Learning title with enhanced typography
+        title_label = StyledLabel(
+            header_row,
             text=learning['title'],
-            font=ctk.CTkFont(size=16, weight="bold")
+            variant="subheading",
+            wraplength=400
         )
-        title_label.grid(row=0, column=0, padx=(15, 10), pady=(15, 0), sticky="w")
+        title_label.grid(row=0, column=1, sticky="w")
 
-        # Project association (if any)
+        # Project association badge (if any)
         if learning['project_name']:
-            project_label = ctk.CTkLabel(
-                card,
+            project_badge = StyledFrame(
+                header_row,
+                fg_color=AppColors.PRIMARY,
+                corner_radius=12
+            )
+            project_badge.grid(row=0, column=2, padx=(12, 0))
+
+            project_text = StyledLabel(
+                project_badge,
                 text=f"📁 {learning['project_name']}",
-                font=ctk.CTkFont(size=11, weight="bold"),
-                text_color="#2196F3"
+                variant="caption",
+                text_color="white",
+                font=AppFonts.get_font(10, "bold")
             )
-            project_label.grid(row=0, column=1, padx=10, pady=(15, 0), sticky="e")
+            project_text.pack(padx=10, py=4)
 
-        # Learning content (truncated)
-        content_text = learning['content'][:200] + "..." if len(learning['content']) > 200 else learning['content']
-        content_label = ctk.CTkLabel(
-            card,
-            text=content_text,
-            font=ctk.CTkFont(size=12),
+        # Learning content with better styling
+        content_preview = learning['content']
+        if len(content_preview) > 180:
+            content_preview = content_preview[:180] + "..."
+
+        content_label = StyledLabel(
+            content_frame,
+            text=content_preview,
+            variant="body",
             wraplength=500,
-            justify="left"
+            justify="left",
+            text_color=(AppColors.GRAY_700, AppColors.GRAY_300)
         )
-        content_label.grid(row=1, column=0, columnspan=2, padx=(15, 15), pady=(10, 0), sticky="w")
+        content_label.grid(row=1, column=0, sticky="w", pady=(0, 16))
 
-        # Tags (if any)
+        # Metadata row: tags and date
+        metadata_row = StyledFrame(
+            content_frame,
+            fg_color="transparent"
+        )
+        metadata_row.grid(row=2, column=0, sticky="ew")
+        metadata_row.grid_columnconfigure(1, weight=1)
+
+        # Tags with modern pill design
         if learning['tags']:
-            tags_text = " | ".join(learning['tags'])
-            tags_label = ctk.CTkLabel(
-                card,
-                text=f"🏷️ {tags_text}",
-                font=ctk.CTkFont(size=10),
-                text_color="#666"
+            tags_container = StyledFrame(
+                metadata_row,
+                fg_color="transparent"
             )
-            tags_label.grid(row=2, column=0, columnspan=2, padx=(15, 15), pady=(10, 0), sticky="w")
+            tags_container.grid(row=0, column=0, sticky="w")
 
-        # Created date
+            for i, tag in enumerate(learning['tags'][:3]):  # Show max 3 tags
+                tag_frame = StyledFrame(
+                    tags_container,
+                    fg_color=(AppColors.GRAY_100, AppColors.GRAY_700),
+                    corner_radius=10
+                )
+                tag_frame.grid(row=0, column=i, padx=(0, 8))
+
+                tag_label = StyledLabel(
+                    tag_frame,
+                    text=f"#{tag.lower()}",
+                    variant="caption",
+                    text_color=(AppColors.GRAY_700, AppColors.GRAY_300)
+                )
+                tag_label.pack(padx=8, py=2)
+
+            if len(learning['tags']) > 3:
+                more_label = StyledLabel(
+                    tags_container,
+                    text=f"+{len(learning['tags']) - 3} more",
+                    variant="caption",
+                    text_color=(AppColors.GRAY_500, AppColors.GRAY_400)
+                )
+                more_label.grid(row=0, column=3, padx=(8, 0))
+
+        # Date with better styling
         created_date = format_date(learning['created_at'], '%B %d, %Y')
-        date_label = ctk.CTkLabel(
-            card,
-            text=f"📅 {created_date}",
-            font=ctk.CTkFont(size=10),
-            text_color="#999"
+        date_frame = StyledFrame(
+            metadata_row,
+            fg_color=(AppColors.GRAY_50, AppColors.GRAY_900),
+            corner_radius=8
         )
-        date_label.grid(row=3, column=0, columnspan=2, padx=(15, 15), pady=(10, 15), sticky="w")
+        date_frame.grid(row=0, column=1, sticky="e")
+
+        date_label = StyledLabel(
+            date_frame,
+            text=f"📅 {created_date}",
+            variant="caption",
+            text_color=(AppColors.GRAY_600, AppColors.GRAY_400)
+        )
+        date_label.pack(padx=10, py=4)
 
     def _add_project(self):
         """Handle add project button click."""
