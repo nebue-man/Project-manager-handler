@@ -180,17 +180,23 @@ class StyledFrame(ctk.CTkFrame):
     """A frame with modern styling."""
 
     def __init__(self, parent, **kwargs):
-        # Set default styling
-        default_style = {
-            "corner_radius": AppStyles.CARD_CORNER_RADIUS,
-            "border_width": AppStyles.CARD_BORDER_WIDTH,
-            "fg_color": ("gray90", "gray20")  # Light/Dark mode
-        }
+        try:
+            # Set default styling
+            default_style = {
+                "corner_radius": AppStyles.CARD_CORNER_RADIUS,
+                "border_width": AppStyles.CARD_BORDER_WIDTH,
+                "fg_color": ("gray90", "gray20")  # Light/Dark mode
+            }
 
-        # Override defaults with provided kwargs
-        default_style.update(kwargs)
+            # Override defaults with provided kwargs
+            default_style.update(kwargs)
 
-        super().__init__(parent, **default_style)
+            super().__init__(parent, **default_style)
+
+        except Exception as e:
+            # Fallback to basic frame if styling fails
+            print(f"Warning: StyledFrame creation failed: {e}")
+            super().__init__(parent, **kwargs)
 
 class StyledButton(ctk.CTkButton):
     """A button with modern styling."""
