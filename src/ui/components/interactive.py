@@ -31,10 +31,6 @@ class AnimatedButton(StyledButton):
             print(f"Warning: AnimatedButton creation failed: {e}")
             super().__init__(parent, **kwargs)
 
-        # Add hover effect
-        if self.hover_effect:
-            self._add_hover_effect()
-
     def _add_hover_effect(self):
         """Add hover animation effect."""
         def on_enter(event):
