@@ -291,27 +291,31 @@ class MainWindow(ctk.CTk):
         )
         actions_frame.grid(row=0, column=2, padx=30, pady=20, sticky="e")
 
-        # Refresh button with enhanced styling
-        self.refresh_btn = StyledButton(
+        # Refresh button with enhanced styling and animations
+        self.refresh_btn = AnimatedButton(
             actions_frame,
             style="ghost",
             text="🔄 Refresh",
             command=self._refresh_all,
             width=100,
             height=40,
-            font=AppFonts.get_font(11, "bold")
+            font=AppFonts.get_font(11, "bold"),
+            hover_effect=True,
+            pulse_on_click=True
         )
         self.refresh_btn.pack(side="right", padx=(10, 0))
 
-        # Filter button (new)
-        self.filter_btn = StyledButton(
+        # Filter button with animations
+        self.filter_btn = AnimatedButton(
             actions_frame,
             style="outline",
             text="⚡ Filter",
             command=self._show_filters,
             width=100,
             height=40,
-            font=AppFonts.get_font(11, "bold")
+            font=AppFonts.get_font(11, "bold"),
+            hover_effect=True,
+            pulse_on_click=True
         )
         self.filter_btn.pack(side="right")
 
