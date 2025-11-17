@@ -350,17 +350,37 @@ class MainWindow(ctk.CTk):
 
     def _nav_button_clicked(self, view_name: str):
         """Handle navigation button click."""
-        # Update button states
-        for btn_name, btn in self.nav_buttons.items():
+        # Update button states with enhanced styling
+        for btn_name, btn_data in self.nav_buttons.items():
+            btn = btn_data["button"]
+            color = btn_data["color"]
             if btn_name == view_name:
-                btn.configure(fg_color=("#1f538d", "#1f538d"))  # Highlight selected
+                # Highlight selected button with color
+                btn.configure(
+                    fg_color=(color, color),
+                    text_color="white",
+                    hover_color=(color, color)
+                )
             else:
-                btn.configure(fg_color=ctk.ThemeManager.theme["CTkButton"]["fg_color"])
+                # Reset other buttons to ghost style
+                btn.configure(
+                    fg_color="transparent",
+                    text_color=(AppColors.GRAY_700, AppColors.GRAY_300),
+                    hover_color=(AppColors.GRAY_100, AppColors.GRAY_800)
+                )
 
-        # Update page title
-        self.page_title.configure(text=view_name)
+        # Update page title with icon
+        icons = {
+            "Projects": "📁",
+            "Learnings": "📚",
+            "Calendar": "📅",
+            "Statistics": "📊",
+            "Settings": "⚙️"
+        }
+        icon = icons.get(view_name, "")
+        self.page_title.configure(text=f"{icon} {view_name}")
 
-        # Show corresponding view
+        # Show corresponding view with smooth transition
         if view_name == "Projects":
             self._show_projects_view()
         elif view_name == "Learnings":
