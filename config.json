@@ -1,0 +1,45 @@
+{
+  "app": {
+    "name": "Project Manager",
+    "version": "1.0.0",
+    "window_width": 1200,
+    "window_height": 800,
+    "remember_window_size": true,
+    "minimize_to_tray": false,
+    "start_with_system": false
+  },
+  "notifications": {
+    "enabled": true,
+    "learning_reminder_times": [
+      "09:00",
+      "14:00"
+    ],
+    "deadline_warnings": [
+      "1",
+      "3",
+      "7"
+    ],
+    "quiet_hours_start": "22:00",
+    "quiet_hours_end": "08:00",
+    "sound_enabled": true
+  },
+  "ui": {
+    "theme": "light",
+    "font_size": 12,
+    "items_per_page": 20,
+    "auto_refresh_interval": 30
+  },
+  "database": {
+    "path": "project_manager.db",
+    "backup_enabled": true,
+    "backup_interval_days": 7,
+    "max_backups": 10
+  },
+  "features": {
+    "auto_save": true,
+    "auto_save_interval": 300,
+    "export_format": "json",
+    "date_format": "%Y-%m-%d",
+    "time_format": "%H:%M"
+  }
+}
