@@ -302,26 +302,36 @@ class AppStyles:
     BREAKPOINT_2XL = 1536        # 2X large screens
 
 def get_progress_color(progress):
-    """Get color based on progress percentage."""
-    if progress >= 80:
-        return AppColors.SUCCESS
+    """Get color based on progress percentage with enhanced visual feedback."""
+    if progress >= 90:
+        return AppColors.SUCCESS        # Excellent progress
+    elif progress >= 75:
+        return AppColors.SUCCESS_LIGHT  # Good progress
     elif progress >= 50:
-        return AppColors.WARNING
+        return AppColors.WARNING        # Moderate progress
+    elif progress >= 25:
+        return AppColors.WARNING_LIGHT  # Low progress
     else:
-        return AppColors.GRAY_500
+        return AppColors.GRAY_400       # Very low progress
 
 def get_deadline_urgency_color(days_remaining):
-    """Get color based on deadline urgency."""
+    """Get color based on deadline urgency with granular feedback."""
     if days_remaining < 0:
-        return AppColors.ERROR  # Overdue
+        return AppColors.ERROR_DARK     # Overdue - critical
     elif days_remaining == 0:
-        return AppColors.ERROR  # Due today
+        return AppColors.ERROR          # Due today - urgent
+    elif days_remaining <= 1:
+        return AppColors.ERROR_LIGHT    # Due tomorrow - very urgent
     elif days_remaining <= 3:
-        return AppColors.WARNING  # Soon
+        return AppColors.WARNING_DARK   # Due this week - urgent
     elif days_remaining <= 7:
-        return AppColors.PRIMARY  # Approaching
+        return AppColors.WARNING        # Due next week - approaching
+    elif days_remaining <= 14:
+        return AppColors.ACCENT_ORANGE  # Due in two weeks - moderate
+    elif days_remaining <= 30:
+        return AppColors.ACCENT_BLUE    # Due this month - comfortable
     else:
-        return AppColors.SUCCESS  # Plenty of time
+        return AppColors.SUCCESS        # Plenty of time
 
 def apply_modern_theme():
     """Apply modern theme settings to CustomTkinter."""
