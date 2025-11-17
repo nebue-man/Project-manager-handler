@@ -30,57 +30,209 @@ except (ImportError, Exception):
     ctk = MockCTk()
 
 class AnimationType:
-    """Animation types with easing functions."""
+    """Enhanced animation types with professional easing functions."""
 
     @staticmethod
     def linear(t: float) -> float:
-        """Linear easing."""
+        """Linear easing - constant speed."""
         return t
 
+    # Quad Easing Functions
     @staticmethod
     def ease_in_quad(t: float) -> float:
-        """Quadratic ease-in."""
+        """Quadratic ease-in - accelerates from zero velocity."""
         return t * t
 
     @staticmethod
     def ease_out_quad(t: float) -> float:
-        """Quadratic ease-out."""
+        """Quadratic ease-out - decelerates to zero velocity."""
         return t * (2 - t)
 
     @staticmethod
     def ease_in_out_quad(t: float) -> float:
-        """Quadratic ease-in-out."""
+        """Quadratic ease-in-out - accelerates then decelerates."""
         if t < 0.5:
             return 2 * t * t
         return -1 + (4 - 2 * t) * t
 
+    # Cubic Easing Functions
     @staticmethod
     def ease_in_cubic(t: float) -> float:
-        """Cubic ease-in."""
+        """Cubic ease-in - smoother acceleration."""
         return t * t * t
 
     @staticmethod
     def ease_out_cubic(t: float) -> float:
-        """Cubic ease-out."""
+        """Cubic ease-out - smoother deceleration."""
         p = t - 1
         return p * p * p + 1
 
     @staticmethod
     def ease_in_out_cubic(t: float) -> float:
-        """Cubic ease-in-out."""
+        """Cubic ease-in-out - very smooth acceleration/deceleration."""
         if t < 0.5:
             return 4 * t * t * t
         p = 2 * t - 2
         return 1 + p * p * p / 2
 
+    # Quart Easing Functions
+    @staticmethod
+    def ease_in_quart(t: float) -> float:
+        """Quartic ease-in - strong acceleration."""
+        return t * t * t * t
+
+    @staticmethod
+    def ease_out_quart(t: float) -> float:
+        """Quartic ease-out - strong deceleration."""
+        p = t - 1
+        return 1 - p * p * p * p
+
+    @staticmethod
+    def ease_in_out_quart(t: float) -> float:
+        """Quartic ease-in-out - very strong acceleration/deceleration."""
+        if t < 0.5:
+            return 8 * t * t * t * t
+        p = t - 1
+        return 1 - 8 * p * p * p * p
+
+    # Quint Easing Functions
+    @staticmethod
+    def ease_in_quint(t: float) -> float:
+        """Quintic ease-in - very strong acceleration."""
+        return t * t * t * t * t
+
+    @staticmethod
+    def ease_out_quint(t: float) -> float:
+        """Quintic ease-out - very strong deceleration."""
+        p = t - 1
+        return 1 + p * p * p * p * p
+
+    @staticmethod
+    def ease_in_out_quint(t: float) -> float:
+        """Quintic ease-in-out - extremely strong acceleration/deceleration."""
+        if t < 0.5:
+            return 16 * t * t * t * t * t
+        p = (2 * t - 2)
+        return 1 + 16 * p * p * p * p * p
+
+    # Sine Easing Functions
+    @staticmethod
+    def ease_in_sine(t: float) -> float:
+        """Sine ease-in - smooth, wave-like acceleration."""
+        return 1 - math.cos((t * math.pi) / 2)
+
+    @staticmethod
+    def ease_out_sine(t: float) -> float:
+        """Sine ease-out - smooth, wave-like deceleration."""
+        return math.sin((t * math.pi) / 2)
+
+    @staticmethod
+    def ease_in_out_sine(t: float) -> float:
+        """Sine ease-in-out - smooth wave throughout."""
+        return -(math.cos(math.pi * t) - 1) / 2
+
+    # Exponential Easing Functions
+    @staticmethod
+    def ease_in_expo(t: float) -> float:
+        """Exponential ease-in - slow start, then explosive acceleration."""
+        return 0 if t == 0 else 2 ** (10 * t - 10)
+
+    @staticmethod
+    def ease_out_expo(t: float) -> float:
+        """Exponential ease-out - explosive start, then smooth end."""
+        return 1 if t == 1 else 1 - 2 ** (-10 * t)
+
+    @staticmethod
+    def ease_in_out_expo(t: float) -> float:
+        """Exponential ease-in-out - very dynamic curve."""
+        if t == 0:
+            return 0
+        if t == 1:
+            return 1
+        if t < 0.5:
+            return 2 ** (20 * t - 10) / 2
+        return (2 - 2 ** (-20 * t + 10)) / 2
+
+    # Circular Easing Functions
+    @staticmethod
+    def ease_in_circ(t: float) -> float:
+        """Circular ease-in - smooth circular acceleration."""
+        return 1 - math.sqrt(1 - t * t)
+
+    @staticmethod
+    def ease_out_circ(t: float) -> float:
+        """Circular ease-out - smooth circular deceleration."""
+        p = t - 1
+        return math.sqrt(1 - p * p)
+
+    @staticmethod
+    def ease_in_out_circ(t: float) -> float:
+        """Circular ease-in-out - smooth circular motion."""
+        if t < 0.5:
+            return (1 - math.sqrt(1 - 4 * t * t)) / 2
+        p = 2 * t - 2
+        return (math.sqrt(1 - p * p) + 1) / 2
+
+    # Back Easing Functions (Overshoot)
+    @staticmethod
+    def ease_in_back(t: float, overshoot: float = 1.70158) -> float:
+        """Back ease-in - goes backwards before accelerating."""
+        c1 = overshoot
+        c3 = c1 + 1
+        return c3 * t * t * t - c1 * t * t
+
+    @staticmethod
+    def ease_out_back(t: float, overshoot: float = 1.70158) -> float:
+        """Back ease-out - overshoots then settles back."""
+        c1 = overshoot
+        c3 = c1 + 1
+        return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2
+
+    @staticmethod
+    def ease_in_out_back(t: float, overshoot: float = 1.70158) -> float:
+        """Back ease-in-out - overshoots both ways."""
+        c1 = overshoot * 1.525
+        c2 = c1 + 1
+        if t < 0.5:
+            return ((2 * t) ** 2 * ((c2 + 1) * 2 * t - c2)) / 2
+        return ((2 * t - 2) ** 2 * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2
+
+    # Elastic Easing Functions
+    @staticmethod
+    def ease_in_elastic(t: float, amplitude: float = 1.0, period: float = 0.5) -> float:
+        """Elastic ease-in - bouncy acceleration."""
+        if t == 0 or t == 1:
+            return t
+        c4 = (2 * math.pi) / period
+        return -(amplitude * 2 ** (10 * t - 10)) * math.sin((t * 10 - 10.75) * c4)
+
+    @staticmethod
+    def ease_out_elastic(t: float, amplitude: float = 1.0, period: float = 0.5) -> float:
+        """Elastic ease-out - bouncy deceleration."""
+        if t == 0 or t == 1:
+            return t
+        c4 = (2 * math.pi) / period
+        return amplitude * 2 ** (-10 * t) * math.sin((t * 10 - 0.75) * c4) + 1
+
+    @staticmethod
+    def ease_in_out_elastic(t: float, amplitude: float = 1.0, period: float = 0.5) -> float:
+        """Elastic ease-in-out - bouncy throughout."""
+        if t == 0 or t == 1:
+            return t
+        c5 = (2 * math.pi) / (period * 1.5)
+        if t < 0.5:
+            return -(amplitude * 2 ** (20 * t - 10) * math.sin((20 * t - 11.125) * c5)) / 2
+        return (amplitude * 2 ** (-20 * t + 10) * math.sin((20 * t - 11.125) * c5)) / 2 + 1
+
+    # Bounce Easing Functions
     @staticmethod
     def ease_in_bounce(t: float) -> float:
-        """Bounce ease-in."""
+        """Bounce ease-in - bouncing into position."""
         return 1 - AnimationType.ease_out_bounce(1 - t)
 
     @staticmethod
     def ease_out_bounce(t: float) -> float:
-        """Bounce ease-out."""
+        """Bounce ease-out - bouncing out of position."""
         if t < 1 / 2.75:
             return 7.5625 * t * t
         elif t < 2 / 2.75:
@@ -92,6 +244,34 @@ class AnimationType:
         else:
             p = t - 2.625 / 2.75
             return 7.5625 * p * p + 0.984375
+
+    @staticmethod
+    def ease_in_out_bounce(t: float) -> float:
+        """Bounce ease-in-out - bouncing both ways."""
+        if t < 0.5:
+            return (1 - AnimationType.ease_out_bounce(1 - 2 * t)) / 2
+        return (1 + AnimationType.ease_out_bounce(2 * t - 1)) / 2
+
+    # Custom Presets
+    @staticmethod
+    def smooth(t: float) -> float:
+        """Smooth transition - perfect for most UI animations."""
+        return AnimationType.ease_in_out_cubic(t)
+
+    @staticmethod
+    def snappy(t: float) -> float:
+        """Snappy transition - quick with slight overshoot."""
+        return AnimationType.ease_out_back(t, 1.2)
+
+    @staticmethod
+    def bouncy(t: float) -> float:
+        """Bouncy transition - playful and engaging."""
+        return AnimationType.ease_out_elastic(t, 0.8, 0.4)
+
+    @staticmethod
+    def dramatic(t: float) -> float:
+        """Dramatic transition - strong acceleration."""
+        return AnimationType.ease_in_out_expo(t)
 
 class UIAnimator:
     """Handles UI animations with smooth transitions."""
