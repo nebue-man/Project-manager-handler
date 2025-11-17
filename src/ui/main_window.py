@@ -505,40 +505,50 @@ class MainWindow(ctk.CTk):
             pass  # Fallback silently
 
     def _show_learnings_view(self):
-        """Show learnings view."""
-        # Hide all views
-        for view in self.views.values():
-            view.grid_forget()
-
-        # Show learnings view
-        self.views["Learnings"].grid(row=0, column=0, sticky="nsew")
+        """Show learnings view with smooth transition."""
+        self._smooth_transition_view("Learnings")
 
     def _show_calendar_view(self):
-        """Show calendar view."""
-        # Hide all views
-        for view in self.views.values():
-            view.grid_forget()
-
-        # Show calendar view
-        self.views["Calendar"].grid(row=0, column=0, sticky="nsew")
+        """Show calendar view with smooth transition."""
+        self._smooth_transition_view("Calendar")
 
     def _show_statistics_view(self):
-        """Show statistics view."""
-        # Hide all views
-        for view in self.views.values():
-            view.grid_forget()
-
-        # Show statistics view
-        self.views["Statistics"].grid(row=0, column=0, sticky="nsew")
+        """Show statistics view with smooth transition."""
+        self._smooth_transition_view("Statistics")
 
     def _show_settings_view(self):
-        """Show settings view."""
-        # Hide all views
-        for view in self.views.values():
-            view.grid_forget()
+        """Show settings view with smooth transition."""
+        self._smooth_transition_view("Settings")
 
-        # Show settings view
-        self.views["Settings"].grid(row=0, column=0, sticky="nsew")
+    def _smooth_transition_view(self, target_view_name: str):
+        """Smoothly transition to a target view."""
+        # Fade out current view
+        current_visible = None
+        for name, view in self.views.items():
+            if view.winfo_viewable():
+                current_visible = view
+                break
+
+        # Show target view
+        target_view = self.views[target_view_name]
+        target_view.grid(row=0, column=0, sticky="nsew")
+
+        # Hide other views
+        for name, view in self.views.items():
+            if name != target_view_name:
+                view.grid_forget()
+
+        # Animate view transition
+        try:
+            if current_visible and current_visible != target_view:
+                # Fade out current view
+                current_visible.configure(fg_color=(AppColors.GRAY_100, AppColors.GRAY_900))
+                self.after(100, lambda: current_visible.grid_forget())
+
+            # Fade in target view
+            target_view.configure(fg_color=(AppColors.WHITE, AppColors.GRAY_800))
+        except:
+            pass  # Fallback silently
 
     def _refresh_projects(self):
         """Refresh projects display."""
