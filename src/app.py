@@ -260,6 +260,49 @@ class ProjectManagerApp:
         finally:
             self.shutdown()
 
+    def test_database_functionality(self):
+        """Test database functionality in headless mode."""
+        try:
+            # Test creating a project
+            print("Creating test project...")
+            project_id = self.project_model.create(
+                name="Test Project",
+                description="A test project for headless mode",
+                deadline="2024-12-31",
+                priority="medium"
+            )
+            print(f"✓ Created project with ID: {project_id}")
+
+            # Test getting the project
+            project = self.project_model.get_by_id(project_id)
+            print(f"✓ Retrieved project: {project['name']}")
+
+            # Test creating a learning
+            print("Creating test learning...")
+            learning_id = self.learning_model.create(
+                title="Test Learning",
+                content="This is a test learning entry for headless mode",
+                project_id=project_id
+            )
+            print(f"✓ Created learning with ID: {learning_id}")
+
+            # Test getting the learning
+            learning = self.learning_model.get_by_id(learning_id)
+            print(f"✓ Retrieved learning: {learning['title']}")
+
+            # Test getting all projects
+            projects = self.project_model.get_all()
+            print(f"✓ Total projects in database: {len(projects)}")
+
+            # Test getting all learnings
+            learnings = self.learning_model.get_all()
+            print(f"✓ Total learnings in database: {len(learnings)}")
+
+            print("✓ All database operations successful!")
+
+        except Exception as e:
+            print(f"✗ Database test failed: {e}")
+
     def shutdown(self):
         """Clean shutdown of application."""
         print("Shutting down application...")
