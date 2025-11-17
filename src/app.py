@@ -21,9 +21,86 @@ from utils.helpers import is_quiet_hours
 
 try:
     import customtkinter as ctk
-except ImportError:
-    print("Error: customtkinter is not installed. Please run: pip install -r requirements.txt")
-    sys.exit(1)
+    GUI_AVAILABLE = True
+except (ImportError, Exception) as e:
+    print(f"Warning: GUI not available ({e}). Running in headless mode.")
+    GUI_AVAILABLE = False
+    # Create a minimal mock for headless operation
+    class MockCTk:
+        def set_appearance_mode(self, mode): pass
+        def set_default_color_theme(self, theme): pass
+        def CTk(self):
+            class MockRoot:
+                def mainloop(self):
+                    print("Running in headless mode - database operations only.")
+                    print("Use Ctrl+C to exit.")
+                    try:
+                        import time
+                        while True:
+                            time.sleep(1)
+                    except KeyboardInterrupt:
+                        pass
+                def geometry(self, *args): pass
+                def title(self, *args): pass
+                def protocol(self, *args): pass
+                def destroy(self): pass
+                def _center_window(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+            return MockRoot()
+        def CTkFrame(self, *args, **kwargs):
+            class MockFrame:
+                def pack(self, *args, **kwargs): pass
+                def grid(self, *args, **kwargs): pass
+                def place(self, *args, **kwargs): pass
+                def configure(self, *args, **kwargs): pass
+                def cget(self, *args): return None
+                def bind(self, *args, **kwargs): pass
+                def destroy(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+            return MockFrame()
+        def CTkButton(self, *args, **kwargs):
+            class MockButton:
+                def pack(self, *args, **kwargs): pass
+                def grid(self, *args, **kwargs): pass
+                def configure(self, *args, **kwargs): pass
+                def cget(self, *args): return None
+                def bind(self, *args, **kwargs): pass
+                def destroy(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+            return MockButton()
+        def CTkLabel(self, *args, **kwargs):
+            class MockLabel:
+                def pack(self, *args, **kwargs): pass
+                def grid(self, *args, **kwargs): pass
+                def configure(self, *args, **kwargs): pass
+                def cget(self, *args): return None
+                def destroy(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+            return MockLabel()
+        def CTkEntry(self, *args, **kwargs):
+            class MockEntry:
+                def pack(self, *args, **kwargs): pass
+                def grid(self, *args, **kwargs): pass
+                def configure(self, *args, **kwargs): pass
+                def get(self): return ""
+                def delete(self, *args): pass
+                def insert(self, *args): pass
+                def bind(self, *args, **kwargs): pass
+                def destroy(self): pass
+                def __getattr__(self, name):
+                    def mock_method(*args, **kwargs): pass
+                    return mock_method
+            return MockEntry()
+
+    ctk = MockCTk()
 
 class ProjectManagerApp:
     """Main application class."""
