@@ -39,57 +39,82 @@ except ImportError:
                 pass
 
 class AppColors:
-    """Color scheme for the application."""
+    """Modern color scheme for the application with enhanced visual appeal."""
 
-    # Primary Colors
-    PRIMARY = "#2196F3"        # Blue
-    PRIMARY_DARK = "#1976D2"   # Darker Blue
-    PRIMARY_LIGHT = "#BBDEFB"  # Lighter Blue
+    # Modern Primary Colors - Deeper, more sophisticated
+    PRIMARY = "#1976D2"        # Deep Blue
+    PRIMARY_DARK = "#1565C0"   # Darker Deep Blue
+    PRIMARY_LIGHT = "#42A5F5"  # Light Deep Blue
+    PRIMARY_ULTRA_LIGHT = "#E3F2FD"  # Very Light Blue
 
-    # Secondary Colors
-    SECONDARY = "#FF9800"      # Amber/Orange
-    SECONDARY_DARK = "#F57C00" # Darker Amber
-    SECONDARY_LIGHT = "#FFE0B2" # Lighter Amber
+    # Modern Secondary Colors - Professional purple/indigo
+    SECONDARY = "#673AB7"      # Deep Purple
+    SECONDARY_DARK = "#512DA8" # Darker Deep Purple
+    SECONDARY_LIGHT = "#9575CD" # Light Deep Purple
+    SECONDARY_ULTRA_LIGHT = "#EDE7F6"  # Very Light Purple
 
-    # Success Colors
-    SUCCESS = "#4CAF50"        # Green
-    SUCCESS_DARK = "#388E3C"   # Darker Green
-    SUCCESS_LIGHT = "#C8E6C9"  # Lighter Green
+    # Success Colors - Fresh green tones
+    SUCCESS = "#2E7D32"        # Deep Green
+    SUCCESS_DARK = "#1B5E20"   # Darker Deep Green
+    SUCCESS_LIGHT = "#66BB6A"  # Light Deep Green
+    SUCCESS_ULTRA_LIGHT = "#E8F5E8"  # Very Light Green
 
-    # Warning Colors
-    WARNING = "#FF9800"        # Orange
-    WARNING_DARK = "#F57C00"   # Darker Orange
-    WARNING_LIGHT = "#FFE0B2"  # Lighter Orange
+    # Warning Colors - Warm amber tones
+    WARNING = "#F57C00"        # Deep Amber
+    WARNING_DARK = "#EF6C00"   # Darker Deep Amber
+    WARNING_LIGHT = "#FFB74D"  # Light Deep Amber
+    WARNING_ULTRA_LIGHT = "#FFF3E0"  # Very Light Amber
 
-    # Error Colors
-    ERROR = "#F44336"          # Red
-    ERROR_DARK = "#D32F2F"     # Darker Red
-    ERROR_LIGHT = "#FFCDD2"    # Lighter Red
+    # Error Colors - Modern red
+    ERROR = "#D32F2F"          # Deep Red
+    ERROR_DARK = "#C62828"     # Darker Deep Red
+    ERROR_LIGHT = "#EF5350"    # Light Deep Red
+    ERROR_ULTRA_LIGHT = "#FFEBEE"  # Very Light Red
 
-    # Neutral Colors
+    # Neutral Colors - Refined gray scale
     WHITE = "#FFFFFF"
     BLACK = "#000000"
-    GRAY_50 = "#FAFAFA"
-    GRAY_100 = "#F5F5F5"
-    GRAY_200 = "#EEEEEE"
-    GRAY_300 = "#E0E0E0"
-    GRAY_400 = "#BDBDBD"
-    GRAY_500 = "#9E9E9E"
-    GRAY_600 = "#757575"
-    GRAY_700 = "#616161"
-    GRAY_800 = "#424242"
-    GRAY_900 = "#212121"
+    GRAY_25 = "#FAFAFA"        # Very Light Gray
+    GRAY_50 = "#F5F5F5"        # Extra Light Gray
+    GRAY_100 = "#EEEEEE"       # Light Gray
+    GRAY_200 = "#E0E0E0"       # Lighter Gray
+    GRAY_300 = "#BDBDBD"       # Medium Light Gray
+    GRAY_400 = "#9E9E9E"       # Medium Gray
+    GRAY_500 = "#757575"       # Standard Gray
+    GRAY_600 = "#616161"       # Medium Dark Gray
+    GRAY_700 = "#424242"       # Dark Gray
+    GRAY_800 = "#303030"       # Darker Gray
+    GRAY_850 = "#212121"       # Very Dark Gray
+    GRAY_900 = "#1A1A1A"       # Extra Dark Gray
+    GRAY_950 = "#0D0D0D"       # Ultra Dark Gray
 
-    # Status Colors
-    STATUS_PLANNING = "#2196F3"  # Blue
-    STATUS_ACTIVE = "#8BC34A"     # Light Green
-    STATUS_COMPLETED = "#607D8B" # Blue Gray
-    STATUS_PAUSED = "#FF5722"     # Deep Orange
+    # Modern Status Colors - More sophisticated palette
+    STATUS_PLANNING = "#5C6BC0"     # Indigo
+    STATUS_ACTIVE = "#26A69A"       # Teal
+    STATUS_COMPLETED = "#78909C"    # Blue Gray
+    STATUS_PAUSED = "#FF7043"       # Deep Orange
+    STATUS_CANCELLED = "#8D6E63"    # Brown
 
-    # Priority Colors
-    PRIORITY_LOW = "#4CAF50"     # Green
-    PRIORITY_MEDIUM = "#FF9800"  # Orange
-    PRIORITY_HIGH = "#F44336"    # Red
+    # Modern Priority Colors - Clear visual hierarchy
+    PRIORITY_LOW = "#66BB6A"        # Light Green
+    PRIORITY_MEDIUM = "#FFA726"     # Orange
+    PRIORITY_HIGH = "#EF5350"       # Red
+    PRIORITY_CRITICAL = "#E91E63"   # Pink
+
+    # Accent Colors - For visual interest
+    ACCENT_BLUE = "#039BE5"         # Light Blue
+    ACCENT_GREEN = "#43A047"        # Green
+    ACCENT_PURPLE = "#8E24AA"       # Purple
+    ACCENT_ORANGE = "#FB8C00"       # Dark Orange
+    ACCENT_TEAL = "#00897B"         # Teal
+    ACCENT_CYAN = "#00ACC1"         # Cyan
+
+    # Gradient Colors - For modern effects
+    GRADIENT_PRIMARY = [PRIMARY, PRIMARY_LIGHT]
+    GRADIENT_SECONDARY = [SECONDARY, SECONDARY_LIGHT]
+    GRADIENT_SUCCESS = [SUCCESS, SUCCESS_LIGHT]
+    GRADIENT_WARNING = [WARNING, WARNING_LIGHT]
+    GRADIENT_ERROR = [ERROR, ERROR_LIGHT]
 
 class AppFonts:
     """Font configurations for the application."""
